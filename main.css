@@ -1,0 +1,43 @@
+body {
+    text-align: center;
+    background-color: #F8F9FB;
+    padding: 40px;
+    color: #4B6EA9;
+    font-family:Verdana, Geneva, Tahoma, sans-serif
+}
+
+h2{
+    text-transform: uppercase;
+}
+
+#logo-image {
+    height: 150px;
+    margin-bottom: 40px;
+}
+
+.level-card {
+    display: block;
+    width: fit-content;
+    text-align: center;
+    cursor: pointer;
+    -webkit-filter: drop-shadow(1px 3px 4px #0000005d); 
+    filter: drop-shadow(1px 3px 4px #0000005d);
+}
+
+.task-icon {
+    display: block;
+    width: fit-content;
+    border: solid 5px;
+    border-radius: 20px;
+    background-color: white;
+    margin-bottom: 10px;
+}
+
+.levels-block {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: 26px;
+    padding: 6px;
+    box-shadow: inset 0px 10px 24px 1px rgb(0 0 0 / 33%);
+}
