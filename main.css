@@ -16,12 +16,16 @@ h2{
 }
 
 .level-card {
-    display: block;
+    display: inline-block;
     width: fit-content;
     text-align: center;
     cursor: pointer;
     -webkit-filter: drop-shadow(1px 3px 4px #0000005d); 
     filter: drop-shadow(1px 3px 4px #0000005d);
+}
+
+.level-card + .level-card {
+    margin-left: 20px;
 }
 
 .task-icon {

@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "jdenticon": "^3.1.0"
+    "jdenticon": "^3.1.0",
+    "tasks": "0.0.3"
   }
 }

@@ -1,6 +1,25 @@
-import { toSvg } from "jdenticon";
+import { toSvg } from "jdenticon"
+import levels_data from "./tasks/levels.json"
 
+console.log(levels_data);
 
-document.getElementById("50cb2852").innerHTML = toSvg("50cb2852", 128);
-document.getElementById("b60334d2").innerHTML = toSvg("b60334d2", 128);
-document.getElementById("99b1bc43").innerHTML = toSvg("99b1bc43", 128);
+var template = ""
+
+for (var level_name in levels_data) {
+  template += 
+    `<h2>${level_name}</h2>
+    <div class="levels-block">`
+
+    for (var ind in levels_data[level_name]) {
+      var level = levels_data[level_name][ind]
+      var svg = toSvg(level, 128)
+      template += 
+      `<div class="level-card">
+        <div id="${level}" class="task-icon">${svg}</div> 
+        ${level}
+      </div>`
+    }
+  template += `</div>`
+}
+
+document.getElementById("levels_data").innerHTML = template
