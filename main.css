@@ -107,6 +107,16 @@ h2{
     background-color: #870C25;
 }
 
+
+.is_clickable {
+    cursor: pointer;
+}
+
+.is_clickable:hover {
+    /*opacity: 0.7;*/
+    transform: scale(0.9);
+}
+
 table {
     border-spacing: 1px;
     width: 300px;

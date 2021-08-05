@@ -1,4 +1,8 @@
 import { toSvg } from "jdenticon"
+import arrow from "./images/arrow.png"
+import { makeid, GE } from "./utils.js"
+
+var cell_colors = ['is_black', 'is_blue', 'is_red', 'is_green', 'is_yellow', 'is_grey', 'is_magenta', 'is_orange', 'is_aqua', 'is_maroon']
 
 fetch("tasks/levels.json")
   .then(response => response.json())
@@ -38,15 +42,14 @@ window['load_level'] = (level_path) =>{
   .then(json => build_level(json));
 }
 
-var colors = ['is_black', 'is_blue', 'is_red', 'is_green', 'is_yellow', 'is_grey', 'is_magenta', 'is_orange', 'is_aqua', 'is_maroon']
-
-function create_block(block_data){
+function create_block(block_data, is_clickable = false){
   var template = '';
   template += `<div class="is_inline"><table>`
   block_data.forEach(element => {
     template += `<tr>`
     element.forEach(color_ind => {
-      template += `<td class="is_cell ${colors[color_ind]}"></td>`
+      var cell_ind = makeid(8)
+      template += `<td id="${cell_ind}" class="is_cell ${cell_colors[color_ind]} ${is_clickable?'is_clickable':''}" ${is_clickable?`onclick="interact_with_cell('${cell_ind}')"`:''}></td>`
     })
     template += `</tr>`
   })
@@ -62,7 +65,7 @@ window['build_level'] = (level_json) =>{
   level_json.train.forEach(element => {
     template += `<div style="display:inline-block; margin: 0px 30px 80px 30px;">`
     template += create_block(element.input)
-    template += `<span> => </span>`
+    template += ` <img src='${arrow}' style="vertical-align: middle; width: 40px"/> `
     template += create_block(element.output)
     template += `</div>`
   });
@@ -75,41 +78,22 @@ window['build_level'] = (level_json) =>{
 
     template += `<div>`
     template += create_block(element.input)
-    template += `<span> => </span>`
-    template += create_block(empty_block)
+    template += ` <img src='${arrow}' style="vertical-align: middle; width: 40px"/> `
+    template += create_block(empty_block, true)
     template += `</div>`
     //template += `<br><br>`
   });
-  /*
-  var 
-    <div class="is_inline">
-      <table>
-        <tr>
-          <td class="is_cell is_black"></td>
-          <td class="is_cell is_blue"></td>
-          <td class="is_cell is_black"></td>
-          <td class="is_cell is_blue"></td>
-        </tr>
-        <tr>
-          <td class="is_cell is_blue"></td>
-          <td class="is_cell is_black"></td>
-          <td class="is_cell is_blue"></td>
-          <td class="is_cell is_black"></td>
-        </tr>
-        <tr>
-          <td class="is_cell is_black"></td>
-          <td class="is_cell is_blue"></td>
-          <td class="is_cell is_black"></td>
-          <td class="is_cell is_blue"></td>
-        </tr>
-        <tr>
-          <td class="is_cell is_blue"></td>
-          <td class="is_cell is_black"></td>
-          <td class="is_cell is_blue"></td>
-          <td class="is_cell is_black"></td>
-        </tr>
-      </table>
-    </div>`
-    */
+
   document.body.innerHTML = template;
+}
+
+window['interact_with_cell'] = (cell_ind) => {
+  var cell_color = Array.from(GE(cell_ind).classList).filter(cell_class => cell_colors.includes(cell_class))[0]
+  var color_index = cell_colors.indexOf(cell_color)
+  console.log(cell_color)
+  console.log(color_index)
+
+  GE(cell_ind).classList.remove(cell_color)
+  GE(cell_ind).classList.add(cell_colors[(color_index + 1) % cell_colors.length])
+
 }
