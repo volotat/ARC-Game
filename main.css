@@ -16,6 +16,7 @@ h2{
 }
 
 .level-card {
+    margin: 0px 1px 14px 1px;
     display: inline-block;
     width: fit-content;
     text-align: center;
@@ -24,8 +25,13 @@ h2{
     filter: drop-shadow(1px 3px 4px #0000005d);
 }
 
+.level-card:hover {
+    background-color: gainsboro;
+    border-radius: 20px 20px 10px 10px;
+}
+
 .level-card + .level-card {
-    margin-left: 20px;
+    /*margin-left: 20px;*/
 }
 
 .task-icon {
@@ -44,4 +50,65 @@ h2{
     border-radius: 26px;
     padding: 6px;
     box-shadow: inset 0px 10px 24px 1px rgb(0 0 0 / 33%);
+}
+
+.is_inline {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.is_cell {
+	position: relative;
+	/*width: 50%; */
+}
+.is_cell:before {
+	content: "";
+	float: left;
+	padding-top: 100%; 	/* initial ratio of 1:1*/
+}
+
+.is_black {
+    background-color: #000;
+}
+
+.is_blue {
+    background-color: #0074D9;
+}
+
+.is_red {
+    background-color: #FF4136;
+}
+
+.is_green {
+    background-color: #2ECC40;
+}
+
+.is_yellow {
+    background-color: #FFDC00;
+}
+
+.is_grey {
+    background-color: #AAAAAA;
+}
+
+.is_magenta {
+    background-color: #F012BE;
+}
+
+.is_orange {
+    background-color: #FF851B;
+}
+
+.is_aqua {
+    background-color: #7FDBFF;
+}
+
+.is_maroon {
+    background-color: #870C25;
+}
+
+table {
+    border-spacing: 1px;
+    width: 300px;
+    /*height: 300px;*/
 }
