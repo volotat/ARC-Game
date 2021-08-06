@@ -110,12 +110,35 @@ h2{
 
 .is_clickable {
     cursor: pointer;
+    transition-duration: 200ms;
 }
 
 .is_clickable:hover {
     /*opacity: 0.7;*/
-    transform: scale(0.9);
+    transform: scale(0.92);
 }
+
+.is_dragable {
+    cursor: pointer;
+    transition-duration: 500ms;
+}
+
+.is_dragable:hover {
+    /*opacity: 0.7;*/
+    /*outline: solid red 10px;*/
+    transform: scale(1.05) rotate(1deg);
+}
+
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Edge, Opera and Firefox */
+  }
 
 table {
     border-spacing: 1px;

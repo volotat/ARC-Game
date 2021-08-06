@@ -44,7 +44,7 @@ window['load_level'] = (level_path) =>{
 
 function create_block(block_data, is_clickable = false){
   var template = '';
-  template += `<div class="is_inline"><table>`
+  template += `<div class="is_inline ${!is_clickable?'is_dragable':''}"><table>`
   block_data.forEach(element => {
     template += `<tr>`
     element.forEach(color_ind => {
@@ -60,7 +60,7 @@ function create_block(block_data, is_clickable = false){
 
 window['build_level'] = (level_json) =>{
   console.log(level_json)
-  var template = '';
+  var template = '<div class="noselect">';
 
   level_json.train.forEach(element => {
     template += `<div style="display:inline-block; margin: 0px 30px 80px 30px;">`
@@ -84,16 +84,28 @@ window['build_level'] = (level_json) =>{
     //template += `<br><br>`
   });
 
+  template += `</div>`
+
   document.body.innerHTML = template;
 }
 
+var last_interacted_cell;
+var last_color_index;
 window['interact_with_cell'] = (cell_ind) => {
   var cell_color = Array.from(GE(cell_ind).classList).filter(cell_class => cell_colors.includes(cell_class))[0]
   var color_index = cell_colors.indexOf(cell_color)
   console.log(cell_color)
   console.log(color_index)
 
-  GE(cell_ind).classList.remove(cell_color)
-  GE(cell_ind).classList.add(cell_colors[(color_index + 1) % cell_colors.length])
+  if (!last_interacted_cell || cell_ind == last_interacted_cell || cell_color == cell_colors[last_color_index]) {
+    last_color_index = (color_index + 1) % cell_colors.length
+    GE(cell_ind).classList.remove(cell_color)
+    GE(cell_ind).classList.add(cell_colors[last_color_index])
+  } else {
+    GE(cell_ind).classList.remove(cell_color)
+    GE(cell_ind).classList.add(cell_colors[last_color_index])
+    //last_color_index = color_index
+  }
 
+  last_interacted_cell = cell_ind
 }
