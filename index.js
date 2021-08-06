@@ -49,7 +49,8 @@ function create_block(block_data, is_clickable = false){
     template += `<tr>`
     element.forEach(color_ind => {
       var cell_ind = makeid(8)
-      template += `<td id="${cell_ind}" class="is_cell ${cell_colors[color_ind]} ${is_clickable?'is_clickable':''}" ${is_clickable?`onclick="interact_with_cell('${cell_ind}')"`:''}></td>`
+      template += `<td id="${cell_ind}" class="is_cell ${cell_colors[color_ind]} ${is_clickable?'is_clickable':''}" 
+      ${is_clickable?`onmousedown="start_interact_with_cell('${cell_ind}')" onmouseover="hover_over_cell('${cell_ind}')" onmouseup="end_interact_with_cell('${cell_ind}')" `:''}></td>`
     })
     template += `</tr>`
   })
@@ -76,13 +77,18 @@ window['build_level'] = (level_json) =>{
     var empty_block = Array.from(Array(element.output.length), () => Array.from(Array(element.output[0].length), () => 0))
     console.log({output: empty_block})
 
-    template += `<div>`
+    template += `<div style="margin: 0px 30px 80px 30px;">`
     template += create_block(element.input)
     template += ` <img src='${arrow}' style="vertical-align: middle; width: 40px"/> `
     template += create_block(empty_block, true)
     template += `</div>`
-    //template += `<br><br>`
   });
+
+  template += `
+    <button class="big_button is_green">Check!</button>
+    <br>
+    <button class="big_button is_blue"><<< Back <<<</button>
+  `;
 
   template += `</div>`
 
@@ -91,21 +97,50 @@ window['build_level'] = (level_json) =>{
 
 var last_interacted_cell;
 var last_color_index;
-window['interact_with_cell'] = (cell_ind) => {
+var hover_color_index;
+var start_cell_ind;
+
+window['start_interact_with_cell'] = (cell_ind) => {
   var cell_color = Array.from(GE(cell_ind).classList).filter(cell_class => cell_colors.includes(cell_class))[0]
   var color_index = cell_colors.indexOf(cell_color)
   console.log(cell_color)
   console.log(color_index)
 
-  if (!last_interacted_cell || cell_ind == last_interacted_cell || cell_color == cell_colors[last_color_index]) {
-    last_color_index = (color_index + 1) % cell_colors.length
-    GE(cell_ind).classList.remove(cell_color)
-    GE(cell_ind).classList.add(cell_colors[last_color_index])
-  } else {
-    GE(cell_ind).classList.remove(cell_color)
-    GE(cell_ind).classList.add(cell_colors[last_color_index])
-    //last_color_index = color_index
-  }
+  hover_color_index = color_index
+  start_cell_ind = cell_ind
+}
 
+window['hover_over_cell'] = (cell_ind) => {
+  var cell_color = Array.from(GE(cell_ind).classList).filter(cell_class => cell_colors.includes(cell_class))[0]
+  var color_index = cell_colors.indexOf(cell_color)
+  console.log(cell_color)
+  console.log(color_index)
+
+  if (hover_color_index != null) {
+    GE(cell_ind).classList.remove(cell_color)
+    GE(cell_ind).classList.add(cell_colors[hover_color_index])
+  }
+}
+
+window.addEventListener('mouseup', ()=>{
+  hover_color_index = null
+});
+
+window['end_interact_with_cell'] = (cell_ind) => {
+  var cell_color = Array.from(GE(cell_ind).classList).filter(cell_class => cell_colors.includes(cell_class))[0]
+  var color_index = cell_colors.indexOf(cell_color)
+  console.log(cell_color)
+  console.log(color_index)
+  if (start_cell_ind == cell_ind){
+    if (last_interacted_cell == null || cell_ind == last_interacted_cell || cell_color == cell_colors[last_color_index]) {
+        last_color_index = (color_index + 1) % cell_colors.length
+        GE(cell_ind).classList.remove(cell_color)
+        GE(cell_ind).classList.add(cell_colors[last_color_index])
+    } else {
+      GE(cell_ind).classList.remove(cell_color)
+      GE(cell_ind).classList.add(cell_colors[last_color_index])
+      //last_color_index = color_index
+    }
+  }
   last_interacted_cell = cell_ind
 }
