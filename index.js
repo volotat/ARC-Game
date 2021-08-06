@@ -3,15 +3,20 @@ import arrow from "./images/arrow.png"
 import { makeid, GE } from "./utils.js"
 
 var cell_colors = ['is_black', 'is_blue', 'is_red', 'is_green', 'is_yellow', 'is_grey', 'is_magenta', 'is_orange', 'is_aqua', 'is_maroon']
+var cached_levels_data
 
 fetch("tasks/levels.json")
   .then(response => response.json())
   .then(json => build_levels(json));
 
 window['build_levels'] = (levels_data) => {
+  if (!levels_data) levels_data = cached_levels_data
+  else cached_levels_data = levels_data  
   console.log(levels_data);
   
-  var template = "..."
+  var template = `
+    <img src="images/logo.png" id="logo-image"/>
+    <div id="levels_data">`
 
   for (var level_name in levels_data) {
     template += 
@@ -26,16 +31,16 @@ window['build_levels'] = (levels_data) => {
           <div id="${level}" class="task-icon">${svg}</div> 
           ${level_ind}
         </div>`
-      }
+      } //solved
     template += `</div>`
   }
-
-  document.getElementById("levels_data").innerHTML = template
+  template += `</div>`
+  GE("main_container").innerHTML = template
   
 }
 
 window['load_level'] = (level_path) =>{
-  document.body.innerHTML = 'Загрузка...';
+  GE('main_container').innerHTML = 'Загрузка...';
   console.log(level_path)
   fetch(level_path)
   .then(response => response.json())
@@ -85,14 +90,14 @@ window['build_level'] = (level_json) =>{
   });
 
   template += `
-    <button class="big_button is_green">Check!</button>
+    <button class="big_button is_green" onclick="check_result()">Check</button>
     <br>
-    <button class="big_button is_blue"><<< Back <<<</button>
+    <button class="big_button is_blue" onclick="build_levels()">Back</button>
   `;
 
   template += `</div>`
 
-  document.body.innerHTML = template;
+  GE('main_container').innerHTML = template;
 }
 
 var last_interacted_cell;
@@ -143,4 +148,15 @@ window['end_interact_with_cell'] = (cell_ind) => {
     }
   }
   last_interacted_cell = cell_ind
+}
+
+
+window['check_result'] = () => {
+  var el = GE('animation');
+  el.style.animation = 'none';
+  el.offsetHeight; 
+  el.style.animation = null; 
+
+  GE('animation').classList.remove('live')
+  GE('animation').classList.add('live')
 }
