@@ -48,21 +48,67 @@ window['load_level'] = (level_path) =>{
   .then(json => build_level(json, level_name));
 }
 
-function create_block(block_data, is_clickable = false, is_dragable = false, is_big = false){
-  var template = ''; 
-  template += `<div class="is_inline ${is_dragable?'is_dragable':''}"><table class="${is_big?'is_big':''}">`
+var block_data_cache = {};
+
+function create_block(params){
+  var block_name = params.block_name ?? "";
+  var block_data = params.block_data;
+  var is_clickable = params.is_clickable ?? false;
+  var is_dragable = params.is_dragable ?? false;
+  var is_big = params.is_big ?? false;
+
+  block_data_cache[block_name] = block_data;
+
+  var template = ''
+  var action = "";
+  if (is_dragable) action = `onclick="copy_block_from_to('${block_name}', 'test_output')" `
+  template += `<div class="is_inline ${is_dragable?'is_dragable':''}" ${action}><table class="${is_big?'is_big':''}">`
+  var rid = 0
   block_data.forEach(element => {
     template += `<tr>`
+    var cid = 0
     element.forEach(color_ind => {
-      var cell_ind = makeid(8)
-      template += `<td id="${cell_ind}" class="is_cell ${cell_colors[color_ind]} ${is_clickable?'is_clickable':''}" 
-      ${is_clickable?`onmousedown="start_interact_with_cell('${cell_ind}')" onmouseover="hover_over_cell('${cell_ind}')" onmouseup="end_interact_with_cell('${cell_ind}')" `:''}></td>`
+      
+      var cell_ind = `${block_name}_${rid}_${cid}`;
+      var action = "";
+      if (is_clickable)
+        action = `onmousedown="start_interact_with_cell('${cell_ind}')" onmouseover="hover_over_cell('${cell_ind}')" onmouseup="end_interact_with_cell('${cell_ind}')" `
+      
+      template += `<td id="${cell_ind}" class="is_cell ${cell_colors[color_ind]} ${is_clickable?'is_clickable':''}" ${action}></td>`
+      cid += 1
     })
     template += `</tr>`
+    rid += 1
   })
   template += `</table></div>`
 
   return template
+}
+
+window['copy_block_from_to'] = (input_name, output_name) => {
+  var input_data = block_data_cache[input_name]
+  var output_data = block_data_cache[output_name]
+
+  
+  var rid = 0
+  output_data.forEach(element => {
+    var cid = 0
+    element.forEach(color_ind => {
+      var in_cell_id = `${input_name}_${rid}_${cid}`;
+      if (GE(in_cell_id)){
+        var in_cell_color = Array.from(GE(in_cell_id).classList).filter(cell_class => cell_colors.includes(cell_class))[0]
+
+        var out_cell_id = `${output_name}_${rid}_${cid}`;
+        var out_cell_color = Array.from(GE(out_cell_id).classList).filter(cell_class => cell_colors.includes(cell_class))[0]
+
+        console.log(in_cell_id, in_cell_color, out_cell_color)
+        GE(out_cell_id).classList.remove(out_cell_color)
+        GE(out_cell_id).classList.add(in_cell_color)
+      }
+      cid += 1
+    })
+    rid += 1
+  })
 }
 
 window['build_level'] = (level_json, level_name) =>{
@@ -74,9 +120,9 @@ window['build_level'] = (level_json, level_name) =>{
   template += `<div style="background-color:bisque">`
   level_json.train.forEach(element => {
     template += `<div style="display:inline-block; margin: 40px 30px 40px 30px;">`
-    template += create_block(element.input)
+    template += create_block({block_data: element.input})
     template += ` <img src='${arrow}' style="vertical-align: middle; width: 40px"/> `
-    template += create_block(element.output)
+    template += create_block({block_data: element.output})
     template += `</div>`
   });
   template += `</div>`
@@ -87,9 +133,9 @@ window['build_level'] = (level_json, level_name) =>{
     console.log({output: empty_block})
 
     template += `<div style="margin: 0px 30px 80px 30px;">`
-    template += create_block(element.input, false, true, true)
+    template += create_block({block_data: element.input, is_dragable: true, is_big: true, block_name: "test_input"})
     template += ` <img src='${arrow}' style="vertical-align: middle; width: 40px"/> `
-    template += create_block(empty_block, true, false, true)
+    template += create_block({block_data: empty_block, is_clickable: true, is_big: true, block_name: "test_output"})
     template += `</div>`
   });
 
@@ -112,8 +158,6 @@ var start_cell_ind;
 window['start_interact_with_cell'] = (cell_ind) => {
   var cell_color = Array.from(GE(cell_ind).classList).filter(cell_class => cell_colors.includes(cell_class))[0]
   var color_index = cell_colors.indexOf(cell_color)
-  console.log(cell_color)
-  console.log(color_index)
 
   hover_color_index = color_index
   start_cell_ind = cell_ind
@@ -138,8 +182,7 @@ window.addEventListener('mouseup', ()=>{
 window['end_interact_with_cell'] = (cell_ind) => {
   var cell_color = Array.from(GE(cell_ind).classList).filter(cell_class => cell_colors.includes(cell_class))[0]
   var color_index = cell_colors.indexOf(cell_color)
-  console.log(cell_color)
-  console.log(color_index)
+
   if (start_cell_ind == cell_ind){
     if (last_interacted_cell == null || cell_ind == last_interacted_cell || cell_color == cell_colors[last_color_index]) {
         last_color_index = (color_index + 1) % cell_colors.length

@@ -1,4 +1,6 @@
 /dist
+!/dist/tasks
+!/dist/images
 /.cache
 /tasks
 /node_modules
