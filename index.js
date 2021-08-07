@@ -4,6 +4,7 @@ import { makeid, GE } from "./utils.js"
 
 var cell_colors = ['is_black', 'is_blue', 'is_red', 'is_green', 'is_yellow', 'is_grey', 'is_magenta', 'is_orange', 'is_aqua', 'is_maroon']
 var cached_levels_data
+var cached_level_path
 
 fetch("tasks/levels.json")
   .then(response => response.json())
@@ -18,17 +19,18 @@ window['build_levels'] = (levels_data) => {
     <img src="images/logo.png" id="logo-image"/>
     <div id="levels_data">`
 
-  for (var level_name in levels_data) {
+  for (var levels_backet in levels_data) {
     template += 
-      `<h2>${level_name}</h2>
+      `<h2>${levels_backet}</h2>
       <div class="levels-block">`
 
-      for (var level_ind in levels_data[level_name]) {
-        var level = levels_data[level_name][level_ind]
+      for (var level_ind in levels_data[levels_backet]) {
+        var level = levels_data[levels_backet][level_ind]
         var svg = toSvg(level_ind, 128)
+        console.log(window.localStorage.getItem('tasks/${level}'))
         template += 
         `<div class="level-card" onclick="load_level('tasks/${level}')">
-          <div id="${level}" class="task-icon">${svg}</div> 
+          <div id="${level}" class="task-icon ${localStorage.getItem(`tasks/${level}`)?'solved':''}">${svg}</div> 
           ${level_ind}
         </div>`
       } //solved
@@ -40,6 +42,8 @@ window['build_levels'] = (levels_data) => {
 }
 
 window['load_level'] = (level_path) =>{
+  cached_level_path = level_path
+
   GE('main_container').innerHTML = 'Загрузка...';
   console.log(level_path)
   let level_name = level_path.replace(/^.*[\\\/]/, '').split('.').slice(0, -1).join('.')
@@ -243,6 +247,7 @@ window['check_result'] = () => {
 
     //save that level is solved
     //...
+    localStorage.setItem(cached_level_path, true);
 
     setTimeout(build_levels, 2600)
   } else {
