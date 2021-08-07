@@ -132,6 +132,10 @@ h2{
     transform: scale(1.05) rotate(1deg);
 }
 
+.is_hidden {
+    display: none;
+}
+
 
 .noselect {
     -webkit-touch-callout: none; /* iOS Safari */
@@ -168,8 +172,12 @@ h2{
 
 table {
     border-spacing: 1px;
-    width: 300px;
+    width: 260px;
     /*height: 300px;*/
+}
+
+table.is_big {
+    width: 340px;
 }
 
 

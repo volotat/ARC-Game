@@ -47,9 +47,9 @@ window['load_level'] = (level_path) =>{
   .then(json => build_level(json));
 }
 
-function create_block(block_data, is_clickable = false){
-  var template = '';
-  template += `<div class="is_inline ${!is_clickable?'is_dragable':''}"><table>`
+function create_block(block_data, is_clickable = false, is_dragable = false, is_big = false){
+  var template = ''; 
+  template += `<div class="is_inline ${is_dragable?'is_dragable':''}"><table class="${is_big?'is_big':''}">`
   block_data.forEach(element => {
     template += `<tr>`
     element.forEach(color_ind => {
@@ -68,14 +68,15 @@ window['build_level'] = (level_json) =>{
   console.log(level_json)
   var template = '<div class="noselect">';
 
+  template += `<div style="background-color:bisque">`
   level_json.train.forEach(element => {
-    template += `<div style="display:inline-block; margin: 0px 30px 80px 30px;">`
+    template += `<div style="display:inline-block; margin: 40px 30px 40px 30px;">`
     template += create_block(element.input)
     template += ` <img src='${arrow}' style="vertical-align: middle; width: 40px"/> `
     template += create_block(element.output)
     template += `</div>`
   });
-
+  template += `</div>`
   template += `<br><br>`
 
   level_json.test.forEach(element => {
@@ -83,9 +84,9 @@ window['build_level'] = (level_json) =>{
     console.log({output: empty_block})
 
     template += `<div style="margin: 0px 30px 80px 30px;">`
-    template += create_block(element.input)
+    template += create_block(element.input, false, true, true)
     template += ` <img src='${arrow}' style="vertical-align: middle; width: 40px"/> `
-    template += create_block(empty_block, true)
+    template += create_block(empty_block, true, false, true)
     template += `</div>`
   });
 
@@ -124,10 +125,13 @@ window['hover_over_cell'] = (cell_ind) => {
   if (hover_color_index != null) {
     GE(cell_ind).classList.remove(cell_color)
     GE(cell_ind).classList.add(cell_colors[hover_color_index])
+    last_color_index = hover_color_index
   }
 }
 
 window.addEventListener('mouseup', ()=>{
+  //if (hover_color_index != null) 
+  //  last_color_index = hover_color_index
   hover_color_index = null
 });
 
@@ -159,4 +163,12 @@ window['check_result'] = () => {
 
   GE('animation').classList.remove('live')
   GE('animation').classList.add('live')
+
+
+  for (var ind = 1; ind<=6; ind++) {
+    GE(`anim_bad_${ind}`).classList.add('is_hidden')
+  }
+
+  var ind = Math.floor(Math.random() * 6) + 1;
+  GE(`anim_bad_${ind}`).classList.remove('is_hidden')
 }
