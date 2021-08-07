@@ -181,7 +181,6 @@ table.is_big {
 }
 
 
-
 @keyframes emoji_anim {
     0%   {opacity: 0; visibility: visible;}
     20%  {opacity: 1;}

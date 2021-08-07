@@ -42,9 +42,10 @@ window['build_levels'] = (levels_data) => {
 window['load_level'] = (level_path) =>{
   GE('main_container').innerHTML = 'Загрузка...';
   console.log(level_path)
+  let level_name = level_path.replace(/^.*[\\\/]/, '').split('.').slice(0, -1).join('.')
   fetch(level_path)
   .then(response => response.json())
-  .then(json => build_level(json));
+  .then(json => build_level(json, level_name));
 }
 
 function create_block(block_data, is_clickable = false, is_dragable = false, is_big = false){
@@ -64,10 +65,12 @@ function create_block(block_data, is_clickable = false, is_dragable = false, is_
   return template
 }
 
-window['build_level'] = (level_json) =>{
+window['build_level'] = (level_json, level_name) =>{
   console.log(level_json)
-  var template = '<div class="noselect">';
 
+  var template = `<h2>${level_name}</h2>`;
+
+  template += `<div class="noselect">`
   template += `<div style="background-color:bisque">`
   level_json.train.forEach(element => {
     template += `<div style="display:inline-block; margin: 40px 30px 40px 30px;">`
@@ -119,9 +122,6 @@ window['start_interact_with_cell'] = (cell_ind) => {
 window['hover_over_cell'] = (cell_ind) => {
   var cell_color = Array.from(GE(cell_ind).classList).filter(cell_class => cell_colors.includes(cell_class))[0]
   var color_index = cell_colors.indexOf(cell_color)
-  console.log(cell_color)
-  console.log(color_index)
-
   if (hover_color_index != null) {
     GE(cell_ind).classList.remove(cell_color)
     GE(cell_ind).classList.add(cell_colors[hover_color_index])
@@ -164,11 +164,24 @@ window['check_result'] = () => {
   GE('animation').classList.remove('live')
   GE('animation').classList.add('live')
 
+  if (true){
+    for (var ind = 0; ind<10; ind++) {
+      GE(`anim_true_${ind}`).classList.add('is_hidden')
+    }
 
-  for (var ind = 1; ind<=6; ind++) {
-    GE(`anim_bad_${ind}`).classList.add('is_hidden')
+    var ind = Math.floor(Math.random() * 10);
+    GE(`anim_true_${ind}`).classList.remove('is_hidden')
+
+    //save that level is solved
+    //...
+
+    setTimeout(build_levels, 2600)
+  } else {
+    for (var ind = 0; ind<6; ind++) {
+      GE(`anim_false_${ind}`).classList.add('is_hidden')
+    }
+
+    var ind = Math.floor(Math.random() * 6);
+    GE(`anim_false_${ind}`).classList.remove('is_hidden')
   }
-
-  var ind = Math.floor(Math.random() * 6) + 1;
-  GE(`anim_bad_${ind}`).classList.remove('is_hidden')
 }
