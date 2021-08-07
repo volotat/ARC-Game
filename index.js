@@ -57,11 +57,9 @@ function create_block(params){
   var is_dragable = params.is_dragable ?? false;
   var is_big = params.is_big ?? false;
 
-  block_data_cache[block_name] = block_data;
-
   var template = ''
   var action = "";
-  if (is_dragable) action = `onclick="copy_block_from_to('${block_name}', 'test_output')" `
+  if (is_dragable) action = `onclick="copy_block_from_to('${block_name}', 'test_result')" `
   template += `<div class="is_inline ${is_dragable?'is_dragable':''}" ${action}><table class="${is_big?'is_big':''}">`
   var rid = 0
   block_data.forEach(element => {
@@ -135,8 +133,13 @@ window['build_level'] = (level_json, level_name) =>{
     template += `<div style="margin: 0px 30px 80px 30px;">`
     template += create_block({block_data: element.input, is_dragable: true, is_big: true, block_name: "test_input"})
     template += ` <img src='${arrow}' style="vertical-align: middle; width: 40px"/> `
-    template += create_block({block_data: empty_block, is_clickable: true, is_big: true, block_name: "test_output"})
+    template += create_block({block_data: empty_block, is_clickable: true, is_big: true, block_name: "test_result"})
     template += `</div>`
+
+    
+    block_data_cache["test_input"] = element.input;
+    block_data_cache["test_output"] = element.output;
+    block_data_cache["test_result"] = empty_block;
   });
 
   template += `
@@ -207,11 +210,34 @@ window['check_result'] = () => {
   GE('animation').classList.remove('live')
   GE('animation').classList.add('live')
 
-  if (true){
-    for (var ind = 0; ind<10; ind++) {
-      GE(`anim_true_${ind}`).classList.add('is_hidden')
-    }
+  var check = true;
 
+  var test_output = block_data_cache['test_output']
+
+  var rid = 0
+  test_output.forEach(element => {
+    var cid = 0
+    element.forEach(color_ind => {
+      var res_cell_id = `test_result_${rid}_${cid}`;
+      var res_cell_color = Array.from(GE(res_cell_id).classList).filter(cell_class => cell_colors.includes(cell_class))[0]
+      var res_color_ind = cell_colors.indexOf(res_cell_color)
+
+      if (color_ind != res_color_ind) check = false;
+      
+      cid += 1
+    })
+    rid += 1
+  })
+
+  for (var ind = 0; ind<10; ind++) {
+    GE(`anim_true_${ind}`).classList.add('is_hidden')
+  }
+
+  for (var ind = 0; ind<6; ind++) {
+    GE(`anim_false_${ind}`).classList.add('is_hidden')
+  }
+
+  if (check){
     var ind = Math.floor(Math.random() * 10);
     GE(`anim_true_${ind}`).classList.remove('is_hidden')
 
@@ -220,10 +246,6 @@ window['check_result'] = () => {
 
     setTimeout(build_levels, 2600)
   } else {
-    for (var ind = 0; ind<6; ind++) {
-      GE(`anim_false_${ind}`).classList.add('is_hidden')
-    }
-
     var ind = Math.floor(Math.random() * 6);
     GE(`anim_false_${ind}`).classList.remove('is_hidden')
   }
