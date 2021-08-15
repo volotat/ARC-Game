@@ -1,8 +1,2 @@
-/dist/*
-!/dist/tasks
-!/dist/images
-/dist/tasks/evaluation/*
-/dist/tasks/training/*
-/.cache
-/tasks
-/node_modules
+/source/.cache
+/source/node_modules

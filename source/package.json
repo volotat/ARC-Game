@@ -1,0 +1,18 @@
+{
+  "name": "ARC-Game",
+  "version": "1.0.0",
+  "description": "The Abstraction and Reasoning Corpus made into a kids game",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html --out-dir ./../",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "images": "^3.2.3",
+    "jdenticon": "^3.1.0",
+    "tasks": "0.0.3"
+  }
+}
