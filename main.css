@@ -52,6 +52,31 @@ h2{
     box-shadow: inset 0px 10px 24px 1px rgb(0 0 0 / 33%);
 }
 
+.pallete {
+    position: fixed;
+    z-index: 10;
+    bottom: 0;
+    background-color: white;
+    padding: 20px 40px 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: fit-content;
+    border-radius: 40px 40px 0 0;
+    box-shadow: 0px 5px 24px 1px rgb(0 0 0 / 33%);
+}
+
+.pallete_cell {
+    width: 100px;
+    height: 100px;
+    
+}
+
+.pallete_cell.main {
+    border: thick double white;
+    margin-right: 20px;
+    box-shadow: 0px 5px 24px 1px rgb(0 0 0 / 33%);
+}
+
 .is_inline {
     display: inline-block;
     vertical-align: middle;

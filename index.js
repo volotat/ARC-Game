@@ -113,10 +113,24 @@ window['copy_block_from_to'] = (input_name, output_name) => {
   })
 }
 
+window['set_main_color'] = (color) => {
+  params.last_color_index = color
+}
+
 window['build_level'] = (level_json, level_name) =>{
   console.log(level_json)
 
-  var template = `<h2>${level_name}</h2>`;
+  var template = `<h2>${level_name}</h2>`
+
+  template += `
+  <div class="pallete">
+    <div id="main_color" class="pallete_cell main ${cell_colors[0]} is_inline"></div>`
+
+  cell_colors.forEach(color => {
+    template += `<div class="pallete_cell ${color} is_inline is_clickable" onclick="set_main_color(${cell_colors.indexOf(color)})"></div>`
+  });
+
+  template += `</div>`;
 
   template += `<div class="noselect">`
   template += `<div style="background-color:bisque">`
@@ -150,6 +164,7 @@ window['build_level'] = (level_json, level_name) =>{
     <button class="big_button is_green" onclick="check_result()">Check</button>
     <br>
     <button class="big_button is_blue" onclick="build_levels()">Back</button>
+    <div style="height: 160px"><div>
   `;
 
   template += `</div>`
@@ -158,9 +173,22 @@ window['build_level'] = (level_json, level_name) =>{
 }
 
 var last_interacted_cell;
-var last_color_index;
+//var last_color_index;
 var hover_color_index;
 var start_cell_ind;
+
+var params = {
+  set last_color_index(value){
+    this.last_color_index_ = value
+    
+    var main_color = Array.from(GE("main_color").classList).filter(cell_class => cell_colors.includes(cell_class))[0]
+    GE("main_color").classList.remove(main_color) 
+    GE("main_color").classList.add(cell_colors[this.last_color_index_]) 
+  },
+  get last_color_index(){ 
+    return this.last_color_index_
+  },
+}
 
 window['start_interact_with_cell'] = (cell_ind) => {
   var cell_color = Array.from(GE(cell_ind).classList).filter(cell_class => cell_colors.includes(cell_class))[0]
@@ -176,13 +204,13 @@ window['hover_over_cell'] = (cell_ind) => {
   if (hover_color_index != null) {
     GE(cell_ind).classList.remove(cell_color)
     GE(cell_ind).classList.add(cell_colors[hover_color_index])
-    last_color_index = hover_color_index
+    params.last_color_index = hover_color_index
   }
 }
 
 window.addEventListener('mouseup', ()=>{
   //if (hover_color_index != null) 
-  //  last_color_index = hover_color_index
+  //  params.last_color_index = hover_color_index
   hover_color_index = null
 });
 
@@ -191,19 +219,18 @@ window['end_interact_with_cell'] = (cell_ind) => {
   var color_index = cell_colors.indexOf(cell_color)
 
   if (start_cell_ind == cell_ind){
-    if (last_interacted_cell == null || cell_ind == last_interacted_cell || cell_color == cell_colors[last_color_index]) {
-        last_color_index = (color_index + 1) % cell_colors.length
+    if (last_interacted_cell == null || cell_ind == last_interacted_cell || cell_color == cell_colors[params.last_color_index]) {
+        params.last_color_index = (color_index + 1) % cell_colors.length
         GE(cell_ind).classList.remove(cell_color)
-        GE(cell_ind).classList.add(cell_colors[last_color_index])
+        GE(cell_ind).classList.add(cell_colors[params.last_color_index])
     } else {
       GE(cell_ind).classList.remove(cell_color)
-      GE(cell_ind).classList.add(cell_colors[last_color_index])
-      //last_color_index = color_index
+      GE(cell_ind).classList.add(cell_colors[params.last_color_index])
+      //params.last_color_index = color_index
     }
   }
   last_interacted_cell = cell_ind
 }
-
 
 window['check_result'] = () => {
   var el = GE('animation');
