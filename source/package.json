@@ -4,7 +4,7 @@
   "description": "The Abstraction and Reasoning Corpus made into a kids game",
   "main": "index.js",
   "scripts": {
-    "start": "parcel index.html --out-dir ./../",
+    "start": "parcel index.html --out-dir ./../ --public-url .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
