@@ -1,7 +1,7 @@
 body {
     text-align: center;
     background-color: #F8F9FB;
-    padding: 40px;
+    padding: 20px;
     color: #4B6EA9;
     font-family:Verdana, Geneva, Tahoma, sans-serif
 }
@@ -52,23 +52,29 @@ h2{
     box-shadow: inset 0px 10px 24px 1px rgb(0 0 0 / 33%);
 }
 
-.pallete {
+#pallete {
     position: fixed;
     z-index: 10;
     bottom: 0;
     background-color: white;
     padding: 20px 40px 10px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, 100%);
     width: fit-content;
     border-radius: 40px 40px 0 0;
     box-shadow: 0px 5px 24px 1px rgb(0 0 0 / 33%);
+    transition-duration: 200ms;
+}
+
+#pallete.show {
+    transform: translate(-50%, 0);
 }
 
 .pallete_cell {
-    width: 100px;
-    height: 100px;
-    
+    width: 8vw; 
+    aspect-ratio: 1 / 1;
+    max-width: 80px;
+    transition-duration: 100ms;
 }
 
 .pallete_cell.main {
@@ -82,14 +88,32 @@ h2{
     vertical-align: middle;
 }
 
-.is_cell {
-	position: relative;
-	/*width: 50%; */
+.block {
+    display: inline-grid;
+    vertical-align: middle;
+    row-gap: 1px;
+    column-gap: 1px;
+    /*grid-template-columns: repeat(12, 1fr);*/
+    max-width: 100%;
+    max-height: 100%;
+    /*max-width: 250px;
+    max-height: 400px;*/
+
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
+
+.cell {
+	position: relative;
+    aspect-ratio: 1 / 1;
+}
+
 .is_cell:before {
 	content: "";
 	float: left;
-	padding-top: 100%; 	/* initial ratio of 1:1*/
+	padding-top: 100%; 
+    aspect-ratio: 1 / 1;
 }
 
 .is_black {
@@ -143,7 +167,7 @@ h2{
     /*transform: scale(0.92);*/
     transform: scale(1.2);
     box-shadow: 0 0 3px 2px white;
-    z-index: 100;
+    z-index: 5;
 }
 
 .is_dragable {
@@ -195,16 +219,16 @@ h2{
     transform: scale(1.02);
 }
 
+/*
 table {
     border-spacing: 1px;
-    width: 260px;
-    /*height: 300px;*/
+    width: 220px;
 }
 
 table.is_big {
     width: 340px;
 }
-
+*/
 
 @keyframes emoji_anim {
     0%   {opacity: 0; visibility: visible;}
@@ -221,6 +245,7 @@ table.is_big {
     height: 100%;
     background-color: rgb(200 200 200 / 50%);
     visibility: hidden;
+    z-index: 15;
 }
 
 .animation.live {
@@ -241,4 +266,25 @@ table.is_big {
     animation-duration: 3s;
     animation-iteration-count: 1;
     */
+}
+
+.arrow_img {
+    vertical-align: middle; 
+    width: 30px
+}
+
+.train_example{
+    display:inline-block; 
+    /*margin: 40px 30px 40px 30px;*/
+}
+
+#train_container {
+    background-color: bisque;
+    display: flex;
+    flex-direction: row;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    row-gap: 40px;
+    column-gap: 10px;
+    padding: 20px;
 }

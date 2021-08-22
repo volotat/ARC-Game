@@ -1692,7 +1692,7 @@ window['build_levels'] = function (levels_data) {
 
     for (var level_ind in levels_data[levels_backet]) {
       var level = levels_data[levels_backet][level_ind];
-      var svg = (0, _jdenticon.toSvg)(level_ind, 128);
+      var svg = (0, _jdenticon.toSvg)(level_ind, 100);
       template += "<div class=\"level-card\" onclick=\"load_level('tasks/".concat(level, "')\">\n          <div id=\"").concat(level, "\" class=\"task-icon ").concat(localStorage.getItem("tasks/".concat(level)) ? 'solved' : '', "\">").concat(svg, "</div> \n          ").concat(level_ind, "\n        </div>");
     } //solved
 
@@ -1702,6 +1702,7 @@ window['build_levels'] = function (levels_data) {
 
   template += "</div>";
   (0, _utils.GE)("main_container").innerHTML = template;
+  window.scrollTo(0, 0);
 };
 
 window['load_level'] = function (level_path) {
@@ -1719,32 +1720,56 @@ window['load_level'] = function (level_path) {
 var block_data_cache = {};
 
 function create_block(params) {
-  var _params$block_name, _params$is_clickable, _params$is_dragable, _params$is_big;
+  var _params$block_name, _params$is_clickable, _params$is_dragable, _params$is_big, _params$block_size;
 
   var block_name = (_params$block_name = params.block_name) !== null && _params$block_name !== void 0 ? _params$block_name : "";
   var block_data = params.block_data;
   var is_clickable = (_params$is_clickable = params.is_clickable) !== null && _params$is_clickable !== void 0 ? _params$is_clickable : false;
   var is_dragable = (_params$is_dragable = params.is_dragable) !== null && _params$is_dragable !== void 0 ? _params$is_dragable : false;
   var is_big = (_params$is_big = params.is_big) !== null && _params$is_big !== void 0 ? _params$is_big : false;
+  var block_size = (_params$block_size = params.block_size) !== null && _params$block_size !== void 0 ? _params$block_size : 260;
   var template = '';
   var action = "";
   if (is_dragable) action = "onclick=\"copy_block_from_to('".concat(block_name, "', 'test_result')\" ");
-  template += "<div class=\"is_inline ".concat(is_dragable ? 'is_dragable' : '', "\" ").concat(action, "><table class=\"").concat(is_big ? 'is_big' : '', "\">");
+  template += "<div class=\"is_inline ".concat(is_dragable ? 'is_dragable' : '', "\" ").concat(action, " style=\"width: ").concat(block_size, "px; height: ").concat(block_size, "px;\">");
+  /*
+  template += `<table class="${is_big?'is_big':''}">`
+  var rid = 0
+  block_data.forEach(element => {
+    template += `<tr>`
+    var cid = 0
+    element.forEach(color_ind => {
+      
+      var cell_ind = `${block_name}_${rid}_${cid}`;
+      var action = "";
+      if (is_clickable)
+        action = `onmousedown="start_interact_with_cell('${cell_ind}')" onmouseover="hover_over_cell('${cell_ind}')" onmouseup="end_interact_with_cell('${cell_ind}')" `
+      
+      template += `<td id="${cell_ind}" class="cell ${cell_colors[color_ind]} ${is_clickable?'is_clickable':''}" ${action}></td>`
+      cid += 1
+    })
+    template += `</tr>`
+    rid += 1
+  })
+  template += `</table>`
+  */
+
+  template += "<div class=\"block ".concat(is_big ? 'is_big' : '', "\" style=\"grid-template-columns: repeat(").concat(block_data[0].length, ", 1fr); aspect-ratio: ").concat(block_data[0].length, " / ").concat(block_data.length, ";\">");
+  var mz = block_data.length > block_data[0].length ? block_data.length : block_data[0].length;
   var rid = 0;
   block_data.forEach(function (element) {
-    template += "<tr>";
     var cid = 0;
     element.forEach(function (color_ind) {
       var cell_ind = "".concat(block_name, "_").concat(rid, "_").concat(cid);
       var action = "";
       if (is_clickable) action = "onmousedown=\"start_interact_with_cell('".concat(cell_ind, "')\" onmouseover=\"hover_over_cell('").concat(cell_ind, "')\" onmouseup=\"end_interact_with_cell('").concat(cell_ind, "')\" ");
-      template += "<td id=\"".concat(cell_ind, "\" class=\"is_cell ").concat(cell_colors[color_ind], " ").concat(is_clickable ? 'is_clickable' : '', "\" ").concat(action, "></td>");
+      template += "<div id=\"".concat(cell_ind, "\" class=\"cell ").concat(cell_colors[color_ind], " ").concat(is_clickable ? 'is_clickable' : '', "\" ").concat(action, " style=\"width: calc(").concat(block_size, "px / ").concat(mz, " - 2px);\"></div>");
       cid += 1;
     });
-    template += "</tr>";
     rid += 1;
   });
-  template += "</table></div>";
+  template += "</div>";
+  template += "</div>";
   return template;
 }
 
@@ -1783,19 +1808,14 @@ window['set_main_color'] = function (color) {
 window['build_level'] = function (level_json, level_name) {
   console.log(level_json);
   var template = "<h2>".concat(level_name, "</h2>");
-  template += "\n  <div class=\"pallete\">\n    <div id=\"main_color\" class=\"pallete_cell main ".concat(cell_colors[0], " is_inline\"></div>");
-  cell_colors.forEach(function (color) {
-    template += "<div class=\"pallete_cell ".concat(color, " is_inline is_clickable\" onclick=\"set_main_color(").concat(cell_colors.indexOf(color), ")\"></div>");
-  });
-  template += "</div>";
   template += "<div class=\"noselect\">";
-  template += "<div style=\"background-color:bisque\">";
+  template += "<div id=\"train_container\">";
   level_json.train.forEach(function (element) {
-    template += "<div style=\"display:inline-block; margin: 40px 30px 40px 30px;\">";
+    template += "<div class=\"train_example\">";
     template += create_block({
       block_data: element.input
     });
-    template += " <img src='images/arrow.png' style=\"vertical-align: middle; width: 40px\"/> ";
+    template += " <img src='images/arrow.png' class=\"arrow_img\"/> ";
     template += create_block({
       block_data: element.output
     });
@@ -1803,6 +1823,7 @@ window['build_level'] = function (level_json, level_name) {
   });
   template += "</div>";
   template += "<br><br>";
+  template += "<div id=\"test_container\">";
   level_json.test.forEach(function (element) {
     var empty_block = Array.from(Array(element.output.length), function () {
       return Array.from(Array(element.output[0].length), function () {
@@ -1817,23 +1838,38 @@ window['build_level'] = function (level_json, level_name) {
       block_data: element.input,
       is_dragable: true,
       is_big: true,
-      block_name: "test_input"
+      block_name: "test_input",
+      block_size: 340
     });
-    template += " <img src='images/arrow.png' style=\"vertical-align: middle; width: 40px\"/> ";
+    template += " <img src='images/arrow.png' class=\"arrow_img\"/> ";
     template += create_block({
       block_data: empty_block,
       is_clickable: true,
       is_big: true,
-      block_name: "test_result"
+      block_name: "test_result",
+      block_size: 340
     });
     template += "</div>";
     block_data_cache["test_input"] = element.input;
     block_data_cache["test_output"] = element.output;
     block_data_cache["test_result"] = empty_block;
   });
-  template += "\n    <button class=\"big_button is_green\" onclick=\"check_result()\">Check</button>\n    <br>\n    <button class=\"big_button is_blue\" onclick=\"build_levels()\">Back</button>\n    <div style=\"height: 160px\"><div>\n  ";
+  template += "</div>";
+  template += "\n    <button class=\"big_button is_green\" onclick=\"check_result()\">Check</button>\n    <br>\n    <button class=\"big_button is_blue\" onclick=\"build_levels()\">Back</button>\n    <div style=\"height: 140px\"><div>\n  ";
+  template += "</div>";
+  template += "\n  <div id=\"pallete\">\n    <div id=\"main_color\" class=\"pallete_cell main ".concat(cell_colors[0], " is_inline\"></div>");
+  cell_colors.forEach(function (color) {
+    template += "<div class=\"pallete_cell ".concat(color, " is_inline is_clickable\" onclick=\"set_main_color(").concat(cell_colors.indexOf(color), ")\"></div>");
+  });
   template += "</div>";
   (0, _utils.GE)('main_container').innerHTML = template;
+  var observer = new IntersectionObserver(function (entries) {
+    if (entries[0].isIntersecting === true) //console.log('Element is fully visible in screen');
+      (0, _utils.GE)('pallete').classList.add('show');else (0, _utils.GE)('pallete').classList.remove('show');
+  }, {
+    threshold: [0.1]
+  });
+  observer.observe((0, _utils.GE)("test_container"));
 };
 
 var last_interacted_cell; //var last_color_index;
@@ -1982,7 +2018,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "6913" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "2485" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

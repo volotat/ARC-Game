@@ -46,7 +46,7 @@ window['build_levels'] = (levels_data) => {
 
       for (var level_ind in levels_data[levels_backet]) {
         var level = levels_data[levels_backet][level_ind]
-        var svg = toSvg(level_ind, 128)
+        var svg = toSvg(level_ind, 100)
         template += 
         `<div class="level-card" onclick="load_level('tasks/${level}')">
           <div id="${level}" class="task-icon ${localStorage.getItem(`tasks/${level}`)?'solved':''}">${svg}</div> 
@@ -57,6 +57,8 @@ window['build_levels'] = (levels_data) => {
   }
   template += `</div>`
   GE("main_container").innerHTML = template
+
+  window.scrollTo(0, 0)
   
 }
 
@@ -79,11 +81,15 @@ function create_block(params){
   var is_clickable = params.is_clickable ?? false;
   var is_dragable = params.is_dragable ?? false;
   var is_big = params.is_big ?? false;
+  var block_size = params.block_size ?? 260;
 
   var template = ''
   var action = "";
   if (is_dragable) action = `onclick="copy_block_from_to('${block_name}', 'test_result')" `
-  template += `<div class="is_inline ${is_dragable?'is_dragable':''}" ${action}><table class="${is_big?'is_big':''}">`
+  template += `<div class="is_inline ${is_dragable?'is_dragable':''}" ${action} style="width: ${block_size}px; height: ${block_size}px;">`
+  
+  /*
+  template += `<table class="${is_big?'is_big':''}">`
   var rid = 0
   block_data.forEach(element => {
     template += `<tr>`
@@ -95,13 +101,35 @@ function create_block(params){
       if (is_clickable)
         action = `onmousedown="start_interact_with_cell('${cell_ind}')" onmouseover="hover_over_cell('${cell_ind}')" onmouseup="end_interact_with_cell('${cell_ind}')" `
       
-      template += `<td id="${cell_ind}" class="is_cell ${cell_colors[color_ind]} ${is_clickable?'is_clickable':''}" ${action}></td>`
+      template += `<td id="${cell_ind}" class="cell ${cell_colors[color_ind]} ${is_clickable?'is_clickable':''}" ${action}></td>`
       cid += 1
     })
     template += `</tr>`
     rid += 1
   })
-  template += `</table></div>`
+  template += `</table>`
+  */
+
+  template += `<div class="block ${is_big?'is_big':''}" style="grid-template-columns: repeat(${block_data[0].length}, 1fr); aspect-ratio: ${block_data[0].length} / ${block_data.length};">`
+  var mz = block_data.length > block_data[0].length ? block_data.length : block_data[0].length
+  var rid = 0
+  block_data.forEach(element => {
+    var cid = 0
+    element.forEach(color_ind => {
+      
+      var cell_ind = `${block_name}_${rid}_${cid}`;
+      var action = "";
+      if (is_clickable)
+        action = `onmousedown="start_interact_with_cell('${cell_ind}')" onmouseover="hover_over_cell('${cell_ind}')" onmouseup="end_interact_with_cell('${cell_ind}')" `
+      
+      template += `<div id="${cell_ind}" class="cell ${cell_colors[color_ind]} ${is_clickable?'is_clickable':''}" ${action} style="width: calc(${block_size}px / ${mz} - 2px);"></div>`
+      cid += 1
+    })
+    rid += 1
+  })
+  template += `</div>`
+
+  template += `</div>`
 
   return template
 }
@@ -141,8 +169,48 @@ window['build_level'] = (level_json, level_name) =>{
 
   var template = `<h2>${level_name}</h2>`
 
+  template += `<div class="noselect">`
+  template += `<div id="train_container">`
+  level_json.train.forEach(element => {
+    template += `<div class="train_example">`
+    template += create_block({block_data: element.input})
+    template += ` <img src='images/arrow.png' class="arrow_img"/> `
+    template += create_block({block_data: element.output})
+    template += `</div>`
+  });
+  template += `</div>`
+  template += `<br><br>`
+
+  template += `<div id="test_container">`
+  level_json.test.forEach(element => {
+    var empty_block = Array.from(Array(element.output.length), () => Array.from(Array(element.output[0].length), () => 0))
+    console.log({output: empty_block})
+
+    template += `<div style="margin: 0px 30px 80px 30px;">`
+    template += create_block({block_data: element.input, is_dragable: true, is_big: true, block_name: "test_input", block_size: 340})
+    template += ` <img src='images/arrow.png' class="arrow_img"/> `
+    template += create_block({block_data: empty_block, is_clickable: true, is_big: true, block_name: "test_result", block_size: 340})
+    template += `</div>`
+
+    
+    block_data_cache["test_input"] = element.input;
+    block_data_cache["test_output"] = element.output;
+    block_data_cache["test_result"] = empty_block;
+  });
+  template += `</div>`
+
   template += `
-  <div class="pallete">
+    <button class="big_button is_green" onclick="check_result()">Check</button>
+    <br>
+    <button class="big_button is_blue" onclick="build_levels()">Back</button>
+    <div style="height: 140px"><div>
+  `;
+
+  template += `</div>`
+
+  
+  template += `
+  <div id="pallete">
     <div id="main_color" class="pallete_cell main ${cell_colors[0]} is_inline"></div>`
 
   cell_colors.forEach(color => {
@@ -151,44 +219,17 @@ window['build_level'] = (level_json, level_name) =>{
 
   template += `</div>`;
 
-  template += `<div class="noselect">`
-  template += `<div style="background-color:bisque">`
-  level_json.train.forEach(element => {
-    template += `<div style="display:inline-block; margin: 40px 30px 40px 30px;">`
-    template += create_block({block_data: element.input})
-    template += ` <img src='images/arrow.png' style="vertical-align: middle; width: 40px"/> `
-    template += create_block({block_data: element.output})
-    template += `</div>`
-  });
-  template += `</div>`
-  template += `<br><br>`
-
-  level_json.test.forEach(element => {
-    var empty_block = Array.from(Array(element.output.length), () => Array.from(Array(element.output[0].length), () => 0))
-    console.log({output: empty_block})
-
-    template += `<div style="margin: 0px 30px 80px 30px;">`
-    template += create_block({block_data: element.input, is_dragable: true, is_big: true, block_name: "test_input"})
-    template += ` <img src='images/arrow.png' style="vertical-align: middle; width: 40px"/> `
-    template += create_block({block_data: empty_block, is_clickable: true, is_big: true, block_name: "test_result"})
-    template += `</div>`
-
-    
-    block_data_cache["test_input"] = element.input;
-    block_data_cache["test_output"] = element.output;
-    block_data_cache["test_result"] = empty_block;
-  });
-
-  template += `
-    <button class="big_button is_green" onclick="check_result()">Check</button>
-    <br>
-    <button class="big_button is_blue" onclick="build_levels()">Back</button>
-    <div style="height: 160px"><div>
-  `;
-
-  template += `</div>`
-
   GE('main_container').innerHTML = template;
+
+  var observer = new IntersectionObserver(function(entries) {
+    if(entries[0].isIntersecting === true)
+      //console.log('Element is fully visible in screen');
+      GE('pallete').classList.add('show')
+    else
+      GE('pallete').classList.remove('show')
+  }, { threshold: [0.1] });
+  
+  observer.observe(GE("test_container"));
 }
 
 var last_interacted_cell;
