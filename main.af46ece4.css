@@ -111,11 +111,11 @@ h2{
     min-width: 10px;
 }
 
-.is_cell:before {
+.cell:before {
 	content: "";
 	float: left;
 	padding-top: 100%; 
-    aspect-ratio: 1 / 1;
+    /*aspect-ratio: 1 / 1;*/
 }
 
 .is_black {
