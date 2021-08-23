@@ -77,7 +77,7 @@ h2{
     transition-duration: 100ms;
 }
 
-.cell:before {
+.pallete_cell:before {
 	content: "";
 	float: left;
 	padding-top: 100%; 
