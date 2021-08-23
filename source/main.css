@@ -107,6 +107,8 @@ h2{
 .cell {
 	position: relative;
     aspect-ratio: 1 / 1;
+    min-height: 10px;
+    min-width: 10px;
 }
 
 .is_cell:before {
