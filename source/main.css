@@ -77,6 +77,12 @@ h2{
     transition-duration: 100ms;
 }
 
+.cell:before {
+	content: "";
+	float: left;
+	padding-top: 100%; 
+}
+
 .pallete_cell.main {
     border: thick double white;
     margin-right: 20px;
@@ -115,7 +121,6 @@ h2{
 	content: "";
 	float: left;
 	padding-top: 100%; 
-    /*aspect-ratio: 1 / 1;*/
 }
 
 .is_black {
