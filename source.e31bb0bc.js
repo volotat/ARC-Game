@@ -1885,7 +1885,7 @@ window['build_level'] = function (level_json, level_name) {
     block_data_cache["test_result"] = empty_block;
   });
   template += "</div>";
-  template += "\n    <button class=\"big_button is_green\" onclick=\"check_result()\">Check</button>\n    <br>\n    <a href=\"/\"><button class=\"big_button is_blue\">Back</button></a>\n    <div style=\"height: 140px\"><div>\n  ";
+  template += "\n    <button class=\"big_button is_green\" onclick=\"check_result()\">Check</button>\n    <br>\n    <a href=\"?\"><button class=\"big_button is_blue\">Back</button></a>\n    <div style=\"height: 140px\"><div>\n  ";
   template += "</div>";
   template += "\n  <div id=\"pallete\">\n    <div id=\"main_color\" class=\"pallete_cell main ".concat(cell_colors[0], " is_inline\"></div>");
   cell_colors.forEach(function (color) {
@@ -2015,7 +2015,7 @@ window['check_result'] = function () {
 
     localStorage.setItem(cached_level_path, true);
     setTimeout(function () {
-      window.location = "/";
+      window.location = "?";
     }, 2600);
   } else {
     var ind = Math.floor(Math.random() * 6);
@@ -2050,7 +2050,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "14971" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "3934" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

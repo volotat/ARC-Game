@@ -210,7 +210,7 @@ window['build_level'] = (level_json, level_name) =>{
   template += `
     <button class="big_button is_green" onclick="check_result()">Check</button>
     <br>
-    <a href="/"><button class="big_button is_blue">Back</button></a>
+    <a href="?"><button class="big_button is_blue">Back</button></a>
     <div style="height: 140px"><div>
   `;
 
@@ -348,7 +348,7 @@ window['check_result'] = () => {
     //...
     localStorage.setItem(cached_level_path, true);
 
-    setTimeout(()=>{window.location = "/"}, 2600)
+    setTimeout(()=>{window.location = "?"}, 2600)
   } else {
     var ind = Math.floor(Math.random() * 6);
     GE(`anim_false_${ind}`).classList.remove('is_hidden')
