@@ -10,6 +10,11 @@ h2{
     text-transform: uppercase;
 }
 
+a{
+    color: inherit;
+    text-decoration: none;
+}
+
 #logo-image {
     height: 150px;
     margin-bottom: 40px;
@@ -113,8 +118,6 @@ h2{
 .cell {
 	position: relative;
     aspect-ratio: 1 / 1;
-    min-height: 10px;
-    min-width: 10px;
 }
 
 .cell:before {

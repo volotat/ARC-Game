@@ -1,5 +1,5 @@
 import { toSvg } from "jdenticon"
-import { makeid, GE } from "./utils.js"
+import { makeid, GE, GetSearchParam, SetSearchParam } from "./utils.js"
 
 var cell_colors = ['is_black', 'is_blue', 'is_red', 'is_green', 'is_yellow', 'is_grey', 'is_magenta', 'is_orange', 'is_aqua', 'is_maroon']
 var cached_levels_data
@@ -25,11 +25,6 @@ GE('animation').innerHTML = `
 <img id="anim_true_9" class="animation_image is_hidden" src="images/true/upside_down_face.gif"/>  
 `;
 
-fetch("tasks/levels.json")
-  .then(response => response.json())
-  .then(json => build_levels(json));
-
-
 window['build_levels'] = (levels_data) => {
   if (!levels_data) levels_data = cached_levels_data
   else cached_levels_data = levels_data  
@@ -48,10 +43,12 @@ window['build_levels'] = (levels_data) => {
         var level = levels_data[levels_backet][level_ind]
         var svg = toSvg(level_ind, 100)
         template += 
-        `<div class="level-card" onclick="load_level('tasks/${level}')">
-          <div id="${level}" class="task-icon ${localStorage.getItem(`tasks/${level}`)?'solved':''}">${svg}</div> 
-          ${level_ind}
-        </div>`
+        `<a href="?task=${encodeURIComponent(level)}">
+          <div class="level-card">
+            <div id="${level}" class="task-icon ${localStorage.getItem(`tasks/${level}`)?'solved':''}">${svg}</div> 
+            ${level_ind}
+          </div>
+        </a>`
       } //solved
     template += `</div>`
   }
@@ -72,6 +69,17 @@ window['load_level'] = (level_path) =>{
   .then(response => response.json())
   .then(json => build_level(json, level_name));
 }
+
+
+if (GetSearchParam('task')) {
+  var task = decodeURIComponent(GetSearchParam('task'))
+  load_level('tasks/' + task)
+} else {
+  fetch("tasks/levels.json")
+    .then(response => response.json())
+    .then(json => build_levels(json));
+}
+
 
 var block_data_cache = {};
 
@@ -202,7 +210,7 @@ window['build_level'] = (level_json, level_name) =>{
   template += `
     <button class="big_button is_green" onclick="check_result()">Check</button>
     <br>
-    <button class="big_button is_blue" onclick="build_levels()">Back</button>
+    <a href="/"><button class="big_button is_blue">Back</button></a>
     <div style="height: 140px"><div>
   `;
 
@@ -340,7 +348,7 @@ window['check_result'] = () => {
     //...
     localStorage.setItem(cached_level_path, true);
 
-    setTimeout(build_levels, 2600)
+    setTimeout(()=>{window.location = "/"}, 2600)
   } else {
     var ind = Math.floor(Math.random() * 6);
     GE(`anim_false_${ind}`).classList.remove('is_hidden')

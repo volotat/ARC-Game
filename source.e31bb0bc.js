@@ -1648,6 +1648,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.makeid = makeid;
 exports.GE = GE;
+exports.SetSearchParam = SetSearchParam;
+exports.GetSearchParam = GetSearchParam;
 
 //Random string generator
 function makeid(length) {
@@ -1664,6 +1666,28 @@ function makeid(length) {
 
 function GE(el) {
   return document.getElementById(el);
+} //add param to url
+
+
+function SetSearchParam(param, value) {
+  var url = new URL(window.location.href);
+  var query_string = url.search;
+  var search_params = new URLSearchParams(query_string);
+  var old_value = search_params.get(param);
+
+  if (old_value != value) {
+    if (value != null) search_params.set(param, value);else search_params.delete(param);
+    url.search = search_params.toString();
+    window.history.pushState("", document.title, url);
+  }
+} //get param from url
+
+
+function GetSearchParam(param) {
+  var url = new URL(window.location.href);
+  var query_string = url.search;
+  var search_params = new URLSearchParams(query_string);
+  return search_params.get(param);
 }
 },{}],"index.js":[function(require,module,exports) {
 "use strict";
@@ -1676,11 +1700,6 @@ var cell_colors = ['is_black', 'is_blue', 'is_red', 'is_green', 'is_yellow', 'is
 var cached_levels_data;
 var cached_level_path;
 (0, _utils.GE)('animation').innerHTML = "\n<img id=\"anim_false_0\" class=\"animation_image is_hidden\" src=\"images/false/weary_face.gif\"/>\n<img id=\"anim_false_1\" class=\"animation_image is_hidden\" src=\"images/false/frowning_face.gif\"/>\n<img id=\"anim_false_2\" class=\"animation_image is_hidden\" src=\"images/false/unamused_face.gif\"/>\n<img id=\"anim_false_3\" class=\"animation_image is_hidden\" src=\"images/false/crying_face.gif\"/>\n<img id=\"anim_false_4\" class=\"animation_image is_hidden\" src=\"images/false/pleading_face.gif\"/>\n<img id=\"anim_false_5\" class=\"animation_image is_hidden\" src=\"images/false/thinking_face.gif\"/>\n\n<img id=\"anim_true_0\" class=\"animation_image is_hidden\" src=\"images/true/winking_face.gif\"/>\n<img id=\"anim_true_1\" class=\"animation_image is_hidden\" src=\"images/true/beaming_face_with_smiling_eyes.gif\"/>\n<img id=\"anim_true_2\" class=\"animation_image is_hidden\" src=\"images/true/grinning_face_with_smiling_eyes.gif\"/>\n<img id=\"anim_true_3\" class=\"animation_image is_hidden\" src=\"images/true/hugging_face.gif\"/>\n<img id=\"anim_true_4\" class=\"animation_image is_hidden\" src=\"images/true/partying_face.gif\"/>\n<img id=\"anim_true_5\" class=\"animation_image is_hidden\" src=\"images/true/relieved_face.gif\"/>\n<img id=\"anim_true_6\" class=\"animation_image is_hidden\" src=\"images/true/smiling_face.gif\"/>\n<img id=\"anim_true_7\" class=\"animation_image is_hidden\" src=\"images/true/smiling_face_with_sunglasses.gif\"/>\n<img id=\"anim_true_8\" class=\"animation_image is_hidden\" src=\"images/true/star_struck.gif\"/>\n<img id=\"anim_true_9\" class=\"animation_image is_hidden\" src=\"images/true/upside_down_face.gif\"/>  \n";
-fetch("tasks/levels.json").then(function (response) {
-  return response.json();
-}).then(function (json) {
-  return build_levels(json);
-});
 
 window['build_levels'] = function (levels_data) {
   if (!levels_data) levels_data = cached_levels_data;else cached_levels_data = levels_data;
@@ -1693,7 +1712,7 @@ window['build_levels'] = function (levels_data) {
     for (var level_ind in levels_data[levels_backet]) {
       var level = levels_data[levels_backet][level_ind];
       var svg = (0, _jdenticon.toSvg)(level_ind, 100);
-      template += "<div class=\"level-card\" onclick=\"load_level('tasks/".concat(level, "')\">\n          <div id=\"").concat(level, "\" class=\"task-icon ").concat(localStorage.getItem("tasks/".concat(level)) ? 'solved' : '', "\">").concat(svg, "</div> \n          ").concat(level_ind, "\n        </div>");
+      template += "<a href=\"?task=".concat(encodeURIComponent(level), "\">\n          <div class=\"level-card\">\n            <div id=\"").concat(level, "\" class=\"task-icon ").concat(localStorage.getItem("tasks/".concat(level)) ? 'solved' : '', "\">").concat(svg, "</div> \n            ").concat(level_ind, "\n          </div>\n        </a>");
     } //solved
 
 
@@ -1716,6 +1735,17 @@ window['load_level'] = function (level_path) {
     return build_level(json, level_name);
   });
 };
+
+if ((0, _utils.GetSearchParam)('task')) {
+  var task = decodeURIComponent((0, _utils.GetSearchParam)('task'));
+  load_level('tasks/' + task);
+} else {
+  fetch("tasks/levels.json").then(function (response) {
+    return response.json();
+  }).then(function (json) {
+    return build_levels(json);
+  });
+}
 
 var block_data_cache = {};
 
@@ -1855,7 +1885,7 @@ window['build_level'] = function (level_json, level_name) {
     block_data_cache["test_result"] = empty_block;
   });
   template += "</div>";
-  template += "\n    <button class=\"big_button is_green\" onclick=\"check_result()\">Check</button>\n    <br>\n    <button class=\"big_button is_blue\" onclick=\"build_levels()\">Back</button>\n    <div style=\"height: 140px\"><div>\n  ";
+  template += "\n    <button class=\"big_button is_green\" onclick=\"check_result()\">Check</button>\n    <br>\n    <a href=\"/\"><button class=\"big_button is_blue\">Back</button></a>\n    <div style=\"height: 140px\"><div>\n  ";
   template += "</div>";
   template += "\n  <div id=\"pallete\">\n    <div id=\"main_color\" class=\"pallete_cell main ".concat(cell_colors[0], " is_inline\"></div>");
   cell_colors.forEach(function (color) {
@@ -1984,7 +2014,9 @@ window['check_result'] = function () {
     //...
 
     localStorage.setItem(cached_level_path, true);
-    setTimeout(build_levels, 2600);
+    setTimeout(function () {
+      window.location = "/";
+    }, 2600);
   } else {
     var ind = Math.floor(Math.random() * 6);
     (0, _utils.GE)("anim_false_".concat(ind)).classList.remove('is_hidden');
@@ -2018,7 +2050,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "9239" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "14971" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
