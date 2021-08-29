@@ -1762,28 +1762,6 @@ function create_block(params) {
   var action = "";
   if (is_dragable) action = "onclick=\"copy_block_from_to('".concat(block_name, "', 'test_result')\" ");
   template += "<div class=\"is_inline ".concat(is_dragable ? 'is_dragable' : '', "\" ").concat(action, " style=\"width: ").concat(block_size, "px; height: ").concat(block_size, "px;\">");
-  /*
-  template += `<table class="${is_big?'is_big':''}">`
-  var rid = 0
-  block_data.forEach(element => {
-    template += `<tr>`
-    var cid = 0
-    element.forEach(color_ind => {
-      
-      var cell_ind = `${block_name}_${rid}_${cid}`;
-      var action = "";
-      if (is_clickable)
-        action = `onmousedown="start_interact_with_cell('${cell_ind}')" onmouseover="hover_over_cell('${cell_ind}')" onmouseup="end_interact_with_cell('${cell_ind}')" `
-      
-      template += `<td id="${cell_ind}" class="cell ${cell_colors[color_ind]} ${is_clickable?'is_clickable':''}" ${action}></td>`
-      cid += 1
-    })
-    template += `</tr>`
-    rid += 1
-  })
-  template += `</table>`
-  */
-
   template += "<div class=\"block ".concat(is_big ? 'is_big' : '', "\" style=\"grid-template-columns: repeat(").concat(block_data[0].length, ", 1fr); aspect-ratio: ").concat(block_data[0].length, " / ").concat(block_data.length, ";\">");
   var mz = block_data.length > block_data[0].length ? block_data.length : block_data[0].length;
   var rid = 0;
@@ -1792,7 +1770,7 @@ function create_block(params) {
     element.forEach(function (color_ind) {
       var cell_ind = "".concat(block_name, "_").concat(rid, "_").concat(cid);
       var action = "";
-      if (is_clickable) action = "onmousedown=\"start_interact_with_cell('".concat(cell_ind, "')\" onmouseover=\"hover_over_cell('").concat(cell_ind, "')\" onmouseup=\"end_interact_with_cell('").concat(cell_ind, "')\" ");
+      if (is_clickable) action = "\n          onmousedown=\"start_interact_with_cell('".concat(cell_ind, "')\" \n          onmouseover=\"hover_over_cell('").concat(cell_ind, "')\" \n          onmouseup=\"end_interact_with_cell('").concat(cell_ind, "', ").concat(rid, ", ").concat(cid, ")\" ");
       template += "<div id=\"".concat(cell_ind, "\" class=\"cell ").concat(cell_colors[color_ind], " ").concat(is_clickable ? 'is_clickable' : '', "\" ").concat(action, " style=\"width: calc(").concat(block_size, "px / ").concat(mz, " - 2px);\"></div>");
       cid += 1;
     });
@@ -1832,6 +1810,7 @@ window['copy_block_from_to'] = function (input_name, output_name) {
 };
 
 window['set_main_color'] = function (color) {
+  last_interacted_cell = null;
   params.last_color_index = color;
 };
 
@@ -1889,7 +1868,7 @@ window['build_level'] = function (level_json, level_name) {
   template += "</div>";
   template += "\n  <div id=\"pallete\">\n    <div id=\"main_color\" class=\"pallete_cell main ".concat(cell_colors[0], " is_inline\"></div>");
   cell_colors.forEach(function (color) {
-    template += "<div class=\"pallete_cell ".concat(color, " is_inline is_clickable\" onclick=\"set_main_color(").concat(cell_colors.indexOf(color), ")\"></div>");
+    template += "<div class=\"pallete_cell ".concat(color, " is_inline is_clickable\" onclick=\"set_main_color(").concat(cell_colors.indexOf(color), ")\" onmousedown=\"fill_color = '").concat(color, "'\"></div>");
   });
   template += "</div>";
   (0, _utils.GE)('main_container').innerHTML = template;
@@ -1897,7 +1876,7 @@ window['build_level'] = function (level_json, level_name) {
     if (entries[0].isIntersecting === true) //console.log('Element is fully visible in screen');
       (0, _utils.GE)('pallete').classList.add('show');else (0, _utils.GE)('pallete').classList.remove('show');
   }, {
-    threshold: [0.1]
+    threshold: [0.2]
   });
   observer.observe((0, _utils.GE)("test_container"));
 };
@@ -1906,6 +1885,7 @@ var last_interacted_cell; //var last_color_index;
 
 var hover_color_index;
 var start_cell_ind;
+window['fill_color'] = null;
 var params = {
   last_color_index_: 0,
 
@@ -1924,14 +1904,24 @@ var params = {
 
 };
 window['params'] = params;
+window.addEventListener('mouseup', function () {
+  //if (hover_color_index != null) 
+  //  params.last_color_index = hover_color_index
+  hover_color_index = null;
+  fill_color = null;
+});
+var initial_cell_color = null;
 
 window['start_interact_with_cell'] = function (cell_ind) {
   var cell_color = Array.from((0, _utils.GE)(cell_ind).classList).filter(function (cell_class) {
     return cell_colors.includes(cell_class);
   })[0];
   var color_index = cell_colors.indexOf(cell_color);
-  hover_color_index = color_index;
+  initial_cell_color = cell_color;
+  hover_color_index = params.last_color_index;
   start_cell_ind = cell_ind;
+  (0, _utils.GE)(cell_ind).classList.remove(cell_color);
+  (0, _utils.GE)(cell_ind).classList.add(cell_colors[hover_color_index]); //params.last_color_index = hover_color_index
 };
 
 window['hover_over_cell'] = function (cell_ind) {
@@ -1942,36 +1932,40 @@ window['hover_over_cell'] = function (cell_ind) {
 
   if (hover_color_index != null) {
     (0, _utils.GE)(cell_ind).classList.remove(cell_color);
-    (0, _utils.GE)(cell_ind).classList.add(cell_colors[hover_color_index]);
-    params.last_color_index = hover_color_index;
+    (0, _utils.GE)(cell_ind).classList.add(cell_colors[hover_color_index]); //params.last_color_index = hover_color_index
   }
 };
 
-window.addEventListener('mouseup', function () {
-  //if (hover_color_index != null) 
-  //  params.last_color_index = hover_color_index
-  hover_color_index = null;
-});
+window['end_interact_with_cell'] = function (cell_ind, x, y) {
+  if (fill_color != null) {
+    flood_fill(x, y, fill_color);
+    fill_color = null;
+  } else {
+    var cell_color = Array.from((0, _utils.GE)(cell_ind).classList).filter(function (cell_class) {
+      return cell_colors.includes(cell_class);
+    })[0];
+    var color_index = cell_colors.indexOf(cell_color);
 
-window['end_interact_with_cell'] = function (cell_ind) {
-  var cell_color = Array.from((0, _utils.GE)(cell_ind).classList).filter(function (cell_class) {
-    return cell_colors.includes(cell_class);
-  })[0];
-  var color_index = cell_colors.indexOf(cell_color);
-
-  if (start_cell_ind == cell_ind) {
-    console.log(last_interacted_cell == null, cell_ind == last_interacted_cell, cell_color == cell_colors[params.last_color_index]);
-
-    if (cell_ind == last_interacted_cell || cell_color == cell_colors[params.last_color_index]) {
-      //last_interacted_cell == null || 
+    if (start_cell_ind == cell_ind && cell_color == initial_cell_color) {
       params.last_color_index = (color_index + 1) % cell_colors.length;
       (0, _utils.GE)(cell_ind).classList.remove(cell_color);
       (0, _utils.GE)(cell_ind).classList.add(cell_colors[params.last_color_index]);
-    } else {
-      (0, _utils.GE)(cell_ind).classList.remove(cell_color);
-      (0, _utils.GE)(cell_ind).classList.add(cell_colors[params.last_color_index]); //params.last_color_index = color_index
     }
   }
+  /*
+  if (start_cell_ind == cell_ind){
+    //console.log(last_interacted_cell == null, cell_ind == last_interacted_cell, cell_color == cell_colors[params.last_color_index])
+    if (cell_ind == last_interacted_cell || cell_color == cell_colors[params.last_color_index]) { //last_interacted_cell == null || 
+        params.last_color_index = (color_index + 1) % cell_colors.length
+        GE(cell_ind).classList.remove(cell_color)
+        GE(cell_ind).classList.add(cell_colors[params.last_color_index])
+    } else {
+      GE(cell_ind).classList.remove(cell_color)
+      GE(cell_ind).classList.add(cell_colors[params.last_color_index])
+      //params.last_color_index = color_index
+    }
+  }*/
+
 
   last_interacted_cell = cell_ind;
 };
@@ -2022,6 +2016,35 @@ window['check_result'] = function () {
     (0, _utils.GE)("anim_false_".concat(ind)).classList.remove('is_hidden');
   }
 };
+
+function timeout(ms) {
+  return new Promise(function (resolve) {
+    return setTimeout(resolve, ms);
+  });
+}
+
+window['flood_fill'] = function (x, y, fill_color) {
+  var start_color = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+  var cell_id = "test_result_".concat(x, "_").concat(y);
+
+  if ((0, _utils.GE)(cell_id) && start_color != fill_color) {
+    var cell_color = Array.from((0, _utils.GE)(cell_id).classList).filter(function (cell_class) {
+      return cell_colors.includes(cell_class);
+    })[0];
+    if (!start_color) start_color = cell_color; //var color_ind = cell_colors.indexOf(res_cell_color)
+
+    if (cell_color == start_color) {
+      (0, _utils.GE)(cell_id).classList.remove(cell_color);
+      (0, _utils.GE)(cell_id).classList.add(fill_color);
+      setTimeout(function () {
+        flood_fill(x + 1, y, fill_color, start_color);
+        flood_fill(x - 1, y, fill_color, start_color);
+        flood_fill(x, y + 1, fill_color, start_color);
+        flood_fill(x, y - 1, fill_color, start_color);
+      }, 10);
+    }
+  }
+};
 },{"jdenticon":"node_modules/jdenticon/dist/jdenticon-module.js","./utils.js":"utils.js"}],"C:/Users/admin/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -2050,7 +2073,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "3934" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "14345" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

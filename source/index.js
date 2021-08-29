@@ -95,28 +95,6 @@ function create_block(params){
   var action = "";
   if (is_dragable) action = `onclick="copy_block_from_to('${block_name}', 'test_result')" `
   template += `<div class="is_inline ${is_dragable?'is_dragable':''}" ${action} style="width: ${block_size}px; height: ${block_size}px;">`
-  
-  /*
-  template += `<table class="${is_big?'is_big':''}">`
-  var rid = 0
-  block_data.forEach(element => {
-    template += `<tr>`
-    var cid = 0
-    element.forEach(color_ind => {
-      
-      var cell_ind = `${block_name}_${rid}_${cid}`;
-      var action = "";
-      if (is_clickable)
-        action = `onmousedown="start_interact_with_cell('${cell_ind}')" onmouseover="hover_over_cell('${cell_ind}')" onmouseup="end_interact_with_cell('${cell_ind}')" `
-      
-      template += `<td id="${cell_ind}" class="cell ${cell_colors[color_ind]} ${is_clickable?'is_clickable':''}" ${action}></td>`
-      cid += 1
-    })
-    template += `</tr>`
-    rid += 1
-  })
-  template += `</table>`
-  */
 
   template += `<div class="block ${is_big?'is_big':''}" style="grid-template-columns: repeat(${block_data[0].length}, 1fr); aspect-ratio: ${block_data[0].length} / ${block_data.length};">`
   var mz = block_data.length > block_data[0].length ? block_data.length : block_data[0].length
@@ -128,7 +106,10 @@ function create_block(params){
       var cell_ind = `${block_name}_${rid}_${cid}`;
       var action = "";
       if (is_clickable)
-        action = `onmousedown="start_interact_with_cell('${cell_ind}')" onmouseover="hover_over_cell('${cell_ind}')" onmouseup="end_interact_with_cell('${cell_ind}')" `
+        action = `
+          onmousedown="start_interact_with_cell('${cell_ind}')" 
+          onmouseover="hover_over_cell('${cell_ind}')" 
+          onmouseup="end_interact_with_cell('${cell_ind}', ${rid}, ${cid})" `
       
       template += `<div id="${cell_ind}" class="cell ${cell_colors[color_ind]} ${is_clickable?'is_clickable':''}" ${action} style="width: calc(${block_size}px / ${mz} - 2px);"></div>`
       cid += 1
@@ -169,6 +150,7 @@ window['copy_block_from_to'] = (input_name, output_name) => {
 }
 
 window['set_main_color'] = (color) => {
+  last_interacted_cell = null
   params.last_color_index = color
 }
 
@@ -222,7 +204,7 @@ window['build_level'] = (level_json, level_name) =>{
     <div id="main_color" class="pallete_cell main ${cell_colors[0]} is_inline"></div>`
 
   cell_colors.forEach(color => {
-    template += `<div class="pallete_cell ${color} is_inline is_clickable" onclick="set_main_color(${cell_colors.indexOf(color)})"></div>`
+    template += `<div class="pallete_cell ${color} is_inline is_clickable" onclick="set_main_color(${cell_colors.indexOf(color)})" onmousedown="fill_color = '${color}'"></div>`
   });
 
   template += `</div>`;
@@ -235,7 +217,7 @@ window['build_level'] = (level_json, level_name) =>{
       GE('pallete').classList.add('show')
     else
       GE('pallete').classList.remove('show')
-  }, { threshold: [0.1] });
+  }, { threshold: [0.2] });
   
   observer.observe(GE("test_container"));
 }
@@ -244,6 +226,7 @@ var last_interacted_cell;
 //var last_color_index;
 var hover_color_index;
 var start_cell_ind;
+window['fill_color'] = null;
 
 var params = {
   last_color_index_: 0,
@@ -261,12 +244,25 @@ var params = {
 
 window['params'] = params
 
+window.addEventListener('mouseup', ()=>{
+  //if (hover_color_index != null) 
+  //  params.last_color_index = hover_color_index
+  hover_color_index = null
+  fill_color = null
+});
+
+var initial_cell_color = null
 window['start_interact_with_cell'] = (cell_ind) => {
   var cell_color = Array.from(GE(cell_ind).classList).filter(cell_class => cell_colors.includes(cell_class))[0]
   var color_index = cell_colors.indexOf(cell_color)
 
-  hover_color_index = color_index
+  initial_cell_color = cell_color
+  hover_color_index = params.last_color_index
   start_cell_ind = cell_ind
+
+  GE(cell_ind).classList.remove(cell_color)
+  GE(cell_ind).classList.add(cell_colors[hover_color_index])
+  //params.last_color_index = hover_color_index
 }
 
 window['hover_over_cell'] = (cell_ind) => {
@@ -275,22 +271,27 @@ window['hover_over_cell'] = (cell_ind) => {
   if (hover_color_index != null) {
     GE(cell_ind).classList.remove(cell_color)
     GE(cell_ind).classList.add(cell_colors[hover_color_index])
-    params.last_color_index = hover_color_index
+    //params.last_color_index = hover_color_index
   }
 }
 
-window.addEventListener('mouseup', ()=>{
-  //if (hover_color_index != null) 
-  //  params.last_color_index = hover_color_index
-  hover_color_index = null
-});
+window['end_interact_with_cell'] = (cell_ind, x, y) => {
+  if (fill_color != null) {
+    flood_fill(x, y, fill_color)
+    fill_color = null
+  } else {
+    var cell_color = Array.from(GE(cell_ind).classList).filter(cell_class => cell_colors.includes(cell_class))[0]
+    var color_index = cell_colors.indexOf(cell_color)
 
-window['end_interact_with_cell'] = (cell_ind) => {
-  var cell_color = Array.from(GE(cell_ind).classList).filter(cell_class => cell_colors.includes(cell_class))[0]
-  var color_index = cell_colors.indexOf(cell_color)
-
+    if (start_cell_ind == cell_ind && cell_color == initial_cell_color){
+      params.last_color_index = (color_index + 1) % cell_colors.length
+      GE(cell_ind).classList.remove(cell_color)
+      GE(cell_ind).classList.add(cell_colors[params.last_color_index])
+    }
+  }
+  /*
   if (start_cell_ind == cell_ind){
-    console.log(last_interacted_cell == null, cell_ind == last_interacted_cell, cell_color == cell_colors[params.last_color_index])
+    //console.log(last_interacted_cell == null, cell_ind == last_interacted_cell, cell_color == cell_colors[params.last_color_index])
     if (cell_ind == last_interacted_cell || cell_color == cell_colors[params.last_color_index]) { //last_interacted_cell == null || 
         params.last_color_index = (color_index + 1) % cell_colors.length
         GE(cell_ind).classList.remove(cell_color)
@@ -300,7 +301,7 @@ window['end_interact_with_cell'] = (cell_ind) => {
       GE(cell_ind).classList.add(cell_colors[params.last_color_index])
       //params.last_color_index = color_index
     }
-  }
+  }*/
   last_interacted_cell = cell_ind
 }
 
@@ -352,5 +353,30 @@ window['check_result'] = () => {
   } else {
     var ind = Math.floor(Math.random() * 6);
     GE(`anim_false_${ind}`).classList.remove('is_hidden')
+  }
+}
+
+function timeout(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+window['flood_fill'] = (x, y, fill_color, start_color = null) =>{
+  let cell_id = `test_result_${x}_${y}`;
+  if (GE(cell_id) && start_color != fill_color) {
+    let cell_color = Array.from(GE(cell_id).classList).filter(cell_class => cell_colors.includes(cell_class))[0]
+    if (!start_color) start_color = cell_color
+    //var color_ind = cell_colors.indexOf(res_cell_color)
+
+    if (cell_color == start_color) {
+      GE(cell_id).classList.remove(cell_color)
+      GE(cell_id).classList.add(fill_color)
+
+      setTimeout(()=>{
+        flood_fill(x + 1, y, fill_color, start_color)
+        flood_fill(x - 1, y, fill_color, start_color)
+        flood_fill(x, y + 1, fill_color, start_color)
+        flood_fill(x, y - 1, fill_color, start_color)
+      }, 10)
+    }
   }
 }
