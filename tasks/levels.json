@@ -121,7 +121,11 @@
     "ddf7fa4f": "training/ddf7fa4f.json",
     "8efcae92": "training/8efcae92.json",
     "a65b410d": "training/a65b410d.json",
-    "d06dbe63": "training/d06dbe63.json"
+    "d06dbe63": "training/d06dbe63.json",
+    "e76a88a6": "training/e76a88a6.json",
+    "1da012fc": "evaluation/1da012fc.json",
+    "e8593010": "training/e8593010.json",
+    "952a094c": "training/952a094c.json"
   },
   "Medium": {
     "0e206a2e": "training/0e206a2e.json",
@@ -247,7 +251,8 @@
     "5daaa586": "training/5daaa586.json",
     "6a1e5592": "training/6a1e5592.json",
     "868de0fa": "training/868de0fa.json",
-    "7953d61e": "evaluation/7953d61e.json"
+    "7953d61e": "evaluation/7953d61e.json",
+    "0e671a1a": "evaluation/0e671a1a.json"
   },
   "Hard": {
     "7837ac64": "training/7837ac64.json",
@@ -500,7 +505,6 @@
     "928ad970": "training/928ad970.json",
     "941d9a10": "training/941d9a10.json",
     "94f9d214": "training/94f9d214.json",
-    "952a094c": "training/952a094c.json",
     "963e52fc": "training/963e52fc.json",
     "98cf29f8": "training/98cf29f8.json",
     "9af7a82c": "training/9af7a82c.json",
@@ -571,8 +575,6 @@
     "e26a3af2": "training/e26a3af2.json",
     "e5062a87": "training/e5062a87.json",
     "e50d258f": "training/e50d258f.json",
-    "e76a88a6": "training/e76a88a6.json",
-    "e8593010": "training/e8593010.json",
     "e8dc4411": "training/e8dc4411.json",
     "e9614598": "training/e9614598.json",
     "eb281b96": "training/eb281b96.json",
@@ -597,7 +599,6 @@
     "0becf7df": "evaluation/0becf7df.json",
     "0c786b71": "evaluation/0c786b71.json",
     "0d87d2a6": "evaluation/0d87d2a6.json",
-    "0e671a1a": "evaluation/0e671a1a.json",
     "0f63c0b9": "evaluation/0f63c0b9.json",
     "103eff5b": "evaluation/103eff5b.json",
     "11e1fe23": "evaluation/11e1fe23.json",
@@ -610,7 +611,6 @@
     "1990f7a8": "evaluation/1990f7a8.json",
     "1c56ad9f": "evaluation/1c56ad9f.json",
     "1d398264": "evaluation/1d398264.json",
-    "1da012fc": "evaluation/1da012fc.json",
     "1e81d6f9": "evaluation/1e81d6f9.json",
     "1e97544e": "evaluation/1e97544e.json",
     "212895b5": "evaluation/212895b5.json",

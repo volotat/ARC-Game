@@ -298,3 +298,9 @@ table.is_big {
     column-gap: 10px;
     padding: 20px;
 }
+
+.github_text {
+    text-decoration: underline;
+    font-size: 18pt;
+    margin-left: 14px;
+}
