@@ -89,6 +89,15 @@ if (GetSearchParam('task')) {
 }
 
 
+window.addEventListener('mousemove', e => {
+  var mouseX = e.pageX + 10;
+  var mouseY = e.pageY + 10; 
+
+  GE("circle").style.left = mouseX +'px'
+  GE("circle").style.top = mouseY +'px'
+});
+
+
 var block_data_cache = {};
 
 function create_block(params){
@@ -212,7 +221,7 @@ window['build_level'] = (level_json, level_name) =>{
     <div id="main_color" class="pallete_cell main ${cell_colors[0]} is_inline"></div>`
 
   cell_colors.forEach(color => {
-    template += `<div class="pallete_cell ${color} is_inline is_clickable" onclick="set_main_color(${cell_colors.indexOf(color)})" onmousedown="fill_color = '${color}'"></div>`
+    template += `<div class="pallete_cell ${color} is_inline is_clickable" onclick="set_main_color(${cell_colors.indexOf(color)})" onmousedown="params.fill_color = '${color}'"></div>`
   });
 
   template += `</div>`;
@@ -234,7 +243,6 @@ var last_interacted_cell;
 //var last_color_index;
 var hover_color_index;
 var start_cell_ind;
-window['fill_color'] = null;
 
 var params = {
   last_color_index_: 0,
@@ -248,6 +256,18 @@ var params = {
   get last_color_index(){ 
     return this.last_color_index_
   },
+
+  fill_color_: null,
+  set fill_color(value){
+    this.fill_color_ = value
+    
+    var circle_color = Array.from(GE("circle").classList).filter(cell_class => cell_colors.includes(cell_class))[0]
+    GE("circle").classList.remove(circle_color) 
+    GE("circle").classList.add(this.fill_color_) 
+  },
+  get fill_color(){ 
+    return this.fill_color_
+  },
 }
 
 window['params'] = params
@@ -256,7 +276,7 @@ window.addEventListener('mouseup', ()=>{
   //if (hover_color_index != null) 
   //  params.last_color_index = hover_color_index
   hover_color_index = null
-  fill_color = null
+  params.fill_color = null
 });
 
 var initial_cell_color = null
@@ -284,9 +304,9 @@ window['hover_over_cell'] = (cell_ind) => {
 }
 
 window['end_interact_with_cell'] = (cell_ind, x, y) => {
-  if (fill_color != null) {
-    flood_fill(x, y, fill_color)
-    fill_color = null
+  if (params.fill_color != null) {
+    flood_fill(x, y, params.fill_color)
+    params.fill_color = null
   } else {
     var cell_color = Array.from(GE(cell_ind).classList).filter(cell_class => cell_colors.includes(cell_class))[0]
     var color_index = cell_colors.indexOf(cell_color)
