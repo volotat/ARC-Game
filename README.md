@@ -7,7 +7,7 @@ Link: https://volotat.github.io/ARC-Game/
 
 ## About
 
-The aim of the game is to solve visual tasks given several examples at the beginning. Tasks are presented as several pairs of grids with arbitrary resolution which contains cells of different colors. Each pair represent some transformation of the input grid into output grid. The task itself is to find that transformation and apply it onto test grids that are presented at the bottom of the page. Only exact solutions, in which all cells match the expected answer, are considered correct ones.
+The goal of the game is to solve visual tasks given several examples at the beginning. Tasks are presented as several pairs of grids with arbitrary resolution which contains cells of different colors. Each pair represent some transformation of the input grid into output grid. The task itself is to find that transformation and apply it onto test grids that are presented at the bottom of the page. Only exact solutions, in which all cells match the expected answer, are considered correct ones.
  
 ### Level structure
 
@@ -26,7 +26,7 @@ There are several ways to interact with test grids:
 
 ## Differences with original ARC
 
-Fixed grid sizes: in the original ARC user can specify grid arbitrary grid size on test output. Some tasks are made such that this mechanics plays important role in solving it. In "The ARC Game" output grid already given in correct size which make such tasks much easier. Unfortunately, I wasn't able to found any good interface for changing grid size that would not be too confusing for children.
+Fixed grid sizes: in the original ARC user can specify arbitrary grid size on test output. Some tasks are made such that this mechanics plays important role in solving it. In "The ARC Game" output grid already given in correct size which make such tasks much easier. Unfortunately, I wasn't able to found any good interface for changing grid size that would not be too confusing for children.
 
 ## Build from source 
 
