@@ -3,7 +3,7 @@ The Abstraction and Reasoning Corpus made into a web game
 
 The aim of this repository is to create easy to use UI interface for François Chollet's [Abstraction and Reasoning Corpus](https://github.com/fchollet/ARC) such so children as young as one years old might be able to play with it.
 
-Link: https://volotat.github.io/ARC-Game/
+Link to the game: https://volotat.github.io/ARC-Game/
 
 ## About
 
