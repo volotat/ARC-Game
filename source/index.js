@@ -192,6 +192,7 @@ window['build_level'] = (level_json, level_name) =>{
   level_json.test.forEach(element => {
     var empty_block = Array.from(Array(element.output.length), () => Array.from(Array(element.output[0].length), () => 0))
     console.log({output: empty_block})
+    if (GetSearchParam('mode') == 'edit') empty_block = element.output
 
     template += `<div style="margin: 0px 30px 80px 30px;">`
     template += create_block({block_data: element.input, is_dragable: true, is_big: true, block_name: "test_input", block_size: 340})
