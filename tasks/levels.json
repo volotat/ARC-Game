@@ -276,7 +276,11 @@
     "60c09cac": "evaluation/60c09cac.json",
     "639f5a19": "evaluation/639f5a19.json",
     "aee291af": "evaluation/aee291af.json",
-    "f2829549": "training/f2829549.json"
+    "f2829549": "training/f2829549.json",
+    "2dd70a9a": "training/2dd70a9a.json",
+    "ce4f8723": "training/ce4f8723.json",
+    "508bd3b6": "training/508bd3b6.json",
+    "4c5c2cf0": "training/4c5c2cf0.json"
   },
   "Medium": {
     "0e206a2e": "training/0e206a2e.json",
@@ -495,7 +499,12 @@
     "6aa20dc0": "training/6aa20dc0.json",
     "2697da3f": "evaluation/2697da3f.json",
     "2b01abd0": "evaluation/2b01abd0.json",
-    "6a11f6da": "evaluation/6a11f6da.json"
+    "6a11f6da": "evaluation/6a11f6da.json",
+    "a8d7556c": "training/a8d7556c.json",
+    "a87f7484": "training/a87f7484.json",
+    "673ef223": "training/673ef223.json",
+    "88a10436": "training/88a10436.json",
+    "59341089": "evaluation/59341089.json"
   },
   "Hard": {
     "7837ac64": "training/7837ac64.json",
@@ -551,7 +560,9 @@
     "7d419a02": "evaluation/7d419a02.json",
     "85fa5666": "evaluation/85fa5666.json",
     "8ba14f53": "evaluation/8ba14f53.json",
-    "184a9768": "evaluation/184a9768.json"
+    "184a9768": "evaluation/184a9768.json",
+    "0607ce86": "evaluation/0607ce86.json",
+    "15113be4": "evaluation/15113be4.json"
   },
   "Tedious": {
     "92e50de0": "evaluation/92e50de0.json",
@@ -638,7 +649,8 @@
     "e1d2900e": "evaluation/e1d2900e.json",
     "ba9d41b8": "evaluation/ba9d41b8.json",
     "a64e4611": "training/a64e4611.json",
-    "68b16354": "training/68b16354.json"
+    "68b16354": "training/68b16354.json",
+    "b782dc8a": "training/b782dc8a.json"
   },
   "Multiple solutions": {
     "4852f2fa": "evaluation/4852f2fa.json",
@@ -687,7 +699,6 @@
     "40853293": "training/40853293.json",
     "45737921": "evaluation/45737921.json",
     "55783887": "evaluation/55783887.json",
-    "59341089": "evaluation/59341089.json",
     "73182012": "evaluation/73182012.json",
     "82819916": "training/82819916.json",
     "88207623": "evaluation/88207623.json",
@@ -719,7 +730,6 @@
     "2bcee788": "training/2bcee788.json",
     "2bee17df": "training/2bee17df.json",
     "2c608aff": "training/2c608aff.json",
-    "2dd70a9a": "training/2dd70a9a.json",
     "2dee498d": "training/2dee498d.json",
     "3345333e": "training/3345333e.json",
     "36d67576": "training/36d67576.json",
@@ -736,8 +746,6 @@
     "44f52bb0": "training/44f52bb0.json",
     "47c1f68c": "training/47c1f68c.json",
     "484b58aa": "training/484b58aa.json",
-    "4c5c2cf0": "training/4c5c2cf0.json",
-    "508bd3b6": "training/508bd3b6.json",
     "50cb2852": "training/50cb2852.json",
     "543a7ed5": "training/543a7ed5.json",
     "5582e5ca": "training/5582e5ca.json",
@@ -747,25 +755,19 @@
     "62c24649": "training/62c24649.json",
     "6455b5f5": "training/6455b5f5.json",
     "662c240a": "training/662c240a.json",
-    "673ef223": "training/673ef223.json",
     "67a423a3": "training/67a423a3.json",
     "6d0160f0": "training/6d0160f0.json",
     "6fa7a44f": "training/6fa7a44f.json",
     "834ec97d": "training/834ec97d.json",
-    "88a10436": "training/88a10436.json",
     "8eb1be9a": "training/8eb1be9a.json",
     "941d9a10": "training/941d9a10.json",
     "94f9d214": "training/94f9d214.json",
     "963e52fc": "training/963e52fc.json",
     "a416b8f3": "training/a416b8f3.json",
     "a68b268e": "training/a68b268e.json",
-    "a87f7484": "training/a87f7484.json",
-    "a8d7556c": "training/a8d7556c.json",
     "b2862040": "training/b2862040.json",
-    "b782dc8a": "training/b782dc8a.json",
     "bbc9ae5d": "training/bbc9ae5d.json",
     "c9e6f938": "training/c9e6f938.json",
-    "ce4f8723": "training/ce4f8723.json",
     "d037b0a7": "training/d037b0a7.json",
     "d0f5fe59": "training/d0f5fe59.json",
     "d4a91cb9": "training/d4a91cb9.json",
@@ -775,9 +777,7 @@
     "f15e1fac": "training/f15e1fac.json",
     "f35d900a": "training/f35d900a.json",
     "f5b8619d": "training/f5b8619d.json",
-    "0607ce86": "evaluation/0607ce86.json",
     "0bb8deee": "evaluation/0bb8deee.json",
-    "15113be4": "evaluation/15113be4.json",
     "15663ba9": "evaluation/15663ba9.json",
     "414297c0": "evaluation/414297c0.json",
     "52fd389e": "evaluation/52fd389e.json",
