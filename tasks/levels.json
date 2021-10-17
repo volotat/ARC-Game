@@ -30,7 +30,8 @@
     "90c28cc7": "training/90c28cc7.json",
     "23b5c85d": "training/23b5c85d.json",
     "3aa6fb7a": "training/3aa6fb7a.json",
-    "d0f5fe59": "training/d0f5fe59.json"
+    "d0f5fe59": "training/d0f5fe59.json",
+    "2dee498d": "training/2dee498d.json"
   },
   "Easy": {
     "6773b310": "training/6773b310.json",
@@ -319,7 +320,17 @@
     "2bcee788": "training/2bcee788.json",
     "45737921": "evaluation/45737921.json",
     "d4a91cb9": "training/d4a91cb9.json",
-    "23581191": "training/23581191.json"
+    "23581191": "training/23581191.json",
+    "00d62c1b": "training/00d62c1b.json",
+    "c9e6f938": "training/c9e6f938.json",
+    "29623171": "training/29623171.json",
+    "2204b7a8": "training/2204b7a8.json",
+    "e9ac8c9e": "evaluation/e9ac8c9e.json",
+    "08ed6ac7": "training/08ed6ac7.json",
+    "1bfc4729": "training/1bfc4729.json",
+    "178fcbfb": "training/178fcbfb.json",
+    "e5790162": "evaluation/e5790162.json",
+    "22eb0ac0": "training/22eb0ac0.json"
   },
   "Medium": {
     "0e206a2e": "training/0e206a2e.json",
@@ -562,7 +573,15 @@
     "3befdf3e": "training/3befdf3e.json",
     "e9bb6954": "evaluation/e9bb6954.json",
     "ce8d95cc": "evaluation/ce8d95cc.json",
-    "f15e1fac": "training/f15e1fac.json"
+    "f15e1fac": "training/f15e1fac.json",
+    "a68b268e": "training/a68b268e.json",
+    "137eaa0f": "training/137eaa0f.json",
+    "15663ba9": "evaluation/15663ba9.json",
+    "0a938d79": "training/0a938d79.json",
+    "05269061": "training/05269061.json",
+    "e633a9e5": "evaluation/e633a9e5.json",
+    "e66aafb8": "evaluation/e66aafb8.json",
+    "40853293": "training/40853293.json"
   },
   "Hard": {
     "7837ac64": "training/7837ac64.json",
@@ -622,7 +641,8 @@
     "0607ce86": "evaluation/0607ce86.json",
     "15113be4": "evaluation/15113be4.json",
     "09629e4f": "training/09629e4f.json",
-    "f9a67cb5": "evaluation/f9a67cb5.json"
+    "f9a67cb5": "evaluation/f9a67cb5.json",
+    "df8cc377": "evaluation/df8cc377.json"
   },
   "Tedious": {
     "92e50de0": "evaluation/92e50de0.json",
@@ -718,7 +738,10 @@
     "d931c21c": "evaluation/d931c21c.json",
     "39e1d7f9": "training/39e1d7f9.json",
     "264363fd": "training/264363fd.json",
-    "52fd389e": "evaluation/52fd389e.json"
+    "52fd389e": "evaluation/52fd389e.json",
+    "f3b10344": "evaluation/f3b10344.json",
+    "8eb1be9a": "training/8eb1be9a.json",
+    "a57f2f04": "evaluation/a57f2f04.json"
   },
   "Multiple solutions": {
     "4852f2fa": "evaluation/4852f2fa.json",
@@ -767,50 +790,27 @@
   },
   "Unsorted": {
     "15696249": "evaluation/15696249.json",
-    "29623171": "training/29623171.json",
-    "40853293": "training/40853293.json",
     "55783887": "evaluation/55783887.json",
     "94133066": "evaluation/94133066.json",
     "95990924": "training/95990924.json",
-    "00d62c1b": "training/00d62c1b.json",
-    "05269061": "training/05269061.json",
-    "08ed6ac7": "training/08ed6ac7.json",
-    "0a938d79": "training/0a938d79.json",
-    "137eaa0f": "training/137eaa0f.json",
-    "178fcbfb": "training/178fcbfb.json",
-    "1bfc4729": "training/1bfc4729.json",
-    "2204b7a8": "training/2204b7a8.json",
-    "22eb0ac0": "training/22eb0ac0.json",
-    "2dee498d": "training/2dee498d.json",
     "36fdfd69": "training/36fdfd69.json",
     "3de23699": "training/3de23699.json",
     "6455b5f5": "training/6455b5f5.json",
     "662c240a": "training/662c240a.json",
     "67a423a3": "training/67a423a3.json",
-    "8eb1be9a": "training/8eb1be9a.json",
-    "a68b268e": "training/a68b268e.json",
-    "c9e6f938": "training/c9e6f938.json",
     "d037b0a7": "training/d037b0a7.json",
-    "15663ba9": "evaluation/15663ba9.json",
     "414297c0": "evaluation/414297c0.json",
     "79369cc6": "evaluation/79369cc6.json",
-    "a57f2f04": "evaluation/a57f2f04.json",
     "b9630600": "evaluation/b9630600.json",
     "ca8de6ea": "evaluation/ca8de6ea.json",
     "d94c3b52": "evaluation/d94c3b52.json",
-    "df8cc377": "evaluation/df8cc377.json",
-    "e5790162": "evaluation/e5790162.json",
     "e619ca6e": "evaluation/e619ca6e.json",
-    "e633a9e5": "evaluation/e633a9e5.json",
-    "e66aafb8": "evaluation/e66aafb8.json",
     "e7a25a18": "evaluation/e7a25a18.json",
     "e95e3d8e": "evaluation/e95e3d8e.json",
-    "e9ac8c9e": "evaluation/e9ac8c9e.json",
     "e9b4f6fc": "evaluation/e9b4f6fc.json",
     "ecaa0ec1": "evaluation/ecaa0ec1.json",
     "f0df5ff0": "evaluation/f0df5ff0.json",
     "f21745ec": "evaluation/f21745ec.json",
-    "f3b10344": "evaluation/f3b10344.json",
     "f823c43c": "evaluation/f823c43c.json",
     "fb791726": "evaluation/fb791726.json"
   }
