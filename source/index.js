@@ -251,7 +251,7 @@ window['build_level'] = (level_json, level_name) =>{
   
   template += `
   <div id="pallete">
-    <div id="main_color" class="pallete_cell main ${cell_colors[0]} is_inline"></div>`
+    <div id="main_color" class="pallete_cell main ${cell_colors[params.last_color_index]} is_inline"></div>`
 
   cell_colors.forEach(color => {
     template += `<div class="pallete_cell ${color} is_inline is_clickable" 
