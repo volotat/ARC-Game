@@ -280,7 +280,7 @@ var hover_color_index;
 var start_cell_ind;
 
 var params = {
-  last_color_index_: 0,
+  last_color_index_: 1,
   set last_color_index(value){
     this.last_color_index_ = value
     
