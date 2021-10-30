@@ -19,10 +19,10 @@ The goal of the game is to solve visual tasks given several examples at the begi
 
 There are several ways to interact with test grids:
 
-1. You can change color of any cell by clicking on it.
-2. You can choose any color from the palette and then paint with it on the grid.
-3. You can fill some space on the grid by dragging the color from the pallet.
-4. You can copy input grid data onto output grid by clicking on it.
+<!--1. You can change color of any cell by clicking on it.-->
+1. You can choose any color from the palette and then paint with it on the grid.
+2. You can fill some space on the grid by dragging the color from the pallet.
+3. You can copy input grid data onto output grid by clicking on it.
 
 ## Differences with original ARC
 
