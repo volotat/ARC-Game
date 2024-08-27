@@ -29,7 +29,7 @@ There are several ways to interact with test grids:
 
 Fixed grid sizes: in the original ARC user can specify arbitrary grid size on test output. Some tasks are made such that this mechanics plays important role in solving it. In "The ARC Game" output grid already given in correct size which make such tasks much easier. Unfortunately, I wasn't able to found any good interface for changing grid size that would not be too confusing for children.
 
-Note that the tasks were synchronized with [ARC-AGI](https://github.com/fchollet/ARC-AGI) repository at 20.08.2024.
+Note that the tasks were synchronized with [ARC-AGI](https://github.com/fchollet/ARC-AGI) repository at 25.08.2024. (1.0.2 release)
 
 ## Printable version
 
