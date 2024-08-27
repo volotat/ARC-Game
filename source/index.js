@@ -106,12 +106,13 @@ function create_block(params){
   var is_clickable = params.is_clickable ?? false;
   var is_dragable = params.is_dragable ?? false;
   var is_big = params.is_big ?? false;
-  var block_size = params.block_size ?? 260;
+  //var block_size = params.block_size ?? 260;
+  var block_type = params.block_type ?? "task-train-block";
 
   var template = ''
   var action = "";
   if (is_dragable) action = `onclick="copy_block_from_to('${block_name}', 'test_result')" `
-  template += `<div class="is_inline ${is_dragable?'is_dragable':''}" ${action} style="width: ${block_size}px; height: ${block_size}px;">`
+  template += `<div class="is_inline ${is_dragable?'is_dragable':''} ${block_type}" ${action}>`
 
   if (is_clickable) 
     action = `ontouchmove="onMoveOverBlock(event)" onmousemove="onMoveOverBlock(event)" 
@@ -129,14 +130,14 @@ function create_block(params){
       
       var cell_ind = `${block_name}_${rid}_${cid}`;
       var action = "";
-      /*
+      
       if (is_clickable)
         action = `
           onpointerdown="start_interact_with_cell('${cell_ind}')" 
           onpointerover="hover_over_cell('${cell_ind}');" 
           onpointerup="end_interact_with_cell('${cell_ind}', ${rid}, ${cid})"  `
-      */
-      template += `<div id="${cell_ind}" class="cell ${cell_colors[color_ind]} ${is_clickable?'is_clickable':''}" ${action} style="width: calc(${block_size}px / ${mz} - 2px);"></div>`
+      
+      template += `<div id="${cell_ind}" class="cell ${cell_colors[color_ind]} ${is_clickable?'is_clickable':''}" ${action} style="width: calc(var(${"--"+block_type+"-size"}) / ${mz} - 2px);"></div>`
       cid += 1
     })
     rid += 1
@@ -212,9 +213,9 @@ window['build_level'] = (level_json, level_name) =>{
   template += `<div id="train_container">`
   level_json.train.forEach(element => {
     template += `<div class="train_example">`
-    template += create_block({block_data: element.input})
+    template += create_block({block_data: element.input, block_type: "task-train-block"})
     template += ` <img src='images/arrow.png' class="arrow_img"/> `
-    template += create_block({block_data: element.output})
+    template += create_block({block_data: element.output, block_type: "task-train-block"})
     template += `</div>`
   });
   template += `</div>`
@@ -227,9 +228,9 @@ window['build_level'] = (level_json, level_name) =>{
     if (GetSearchParam('mode') == 'edit') empty_block = element.output
 
     template += `<div style="margin: 0px 30px 80px 30px;">`
-    template += create_block({block_data: element.input, is_dragable: true, is_big: true, block_name: "test_input", block_size: 340})
+    template += create_block({block_data: element.input, is_dragable: true, is_big: true, block_name: "test_input", block_type: "task-test-block"})
     template += ` <img src='images/arrow.png' class="arrow_img"/> `
-    template += create_block({block_data: empty_block, is_clickable: true, is_big: true, block_name: "test_result", block_size: 340})
+    template += create_block({block_data: empty_block, is_clickable: true, is_big: true, block_name: "test_result", block_type: "task-test-block"})
     template += `</div>`
 
     
@@ -243,7 +244,7 @@ window['build_level'] = (level_json, level_name) =>{
     <button class="big_button is_green" onclick="check_result()">Check</button>
     <br>
     <a href="?"><button class="big_button is_blue">Back</button></a>
-    <div style="height: 140px"><div>
+    <div id="pallete_container" style="height: 140px"><div>
   `;
 
   template += `</div>`
@@ -314,7 +315,7 @@ window.addEventListener('mouseup', ()=>{
   params.fill_color = null
 });
 
-/*
+
 var initial_cell_color = null
 window['start_interact_with_cell'] = (cell_ind) => {
   var cell_color = Array.from(GE(cell_ind).classList).filter(cell_class => cell_colors.includes(cell_class))[0]
@@ -355,7 +356,7 @@ window['end_interact_with_cell'] = (cell_ind, x, y) => {
   }
   last_interacted_cell = cell_ind
 }
-*/
+
 
 window['check_result'] = () => {
   var el = GE('animation');
@@ -413,6 +414,7 @@ function timeout(ms) {
 }
 
 window['flood_fill'] = (x, y, fill_color, start_color = null) =>{
+  //console.log('flood_fill', x, y, fill_color, start_color)
   let cell_id = `test_result_${x}_${y}`;
   if (GE(cell_id) && start_color != fill_color) {
     let cell_color = Array.from(GE(cell_id).classList).filter(cell_class => cell_colors.includes(cell_class))[0]

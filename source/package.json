@@ -13,7 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "images": "^3.2.3",
-    "jdenticon": "^3.1.0",
+    "jdenticon": "^3.3.0",
     "tasks": "0.0.3"
   },
   "devDependencies": {

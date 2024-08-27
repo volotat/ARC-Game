@@ -1,3 +1,8 @@
+:root {
+    --task-train-block-size: 260px;
+    --task-test-block-size: 340px
+}
+
 body {
     text-align: center;
     background-color: #F8F9FB;
@@ -63,6 +68,17 @@ a{
     border-radius: 26px;
     padding: 6px;
     box-shadow: inset 0px 10px 24px 1px rgb(0 0 0 / 33%);
+}
+
+.task-train-block { 
+    width: var(--task-train-block-size);
+    height: var(--task-train-block-size);
+}
+
+
+.task-test-block { 
+    width: var(--task-test-block-size);
+    height: var(--task-test-block-size);
 }
 
 #pallete {

@@ -1,0 +1,72 @@
+:root {
+  --task-train-block-size: 245px;
+  --task-test-block-size: 380px
+}
+
+body {
+  background-color: transparent;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+#pallete_container {
+  display: none;
+}
+
+#test_container {
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.train_example {
+  border: 1px dashed black;
+  padding: 1px;
+}
+
+.big_button {
+  display: none;
+}
+
+.block {
+  row-gap: 0px;
+  column-gap: 0px;
+}
+
+.cell {
+  border: 1px solid black;
+}
+
+#train_container {
+  background-color: transparent;
+  /*border: 1px dashed black;*/
+  padding: 0;
+  margin: 0;
+  row-gap: 10px;
+  column-gap: 5px;
+}
+
+.is_black {
+  background-color: transparent;
+}
+
+.is_green {
+  background-color: ForestGreen;
+}
+
+.is_aqua {
+  background-color: DeepSkyBlue;
+}
+
+.is_grey {
+  background-color: #333;
+}
+
+.is_magenta {
+  background-color: DarkViolet;
+}
+
+.is_maroon {
+  background-color: Brown;
+}
